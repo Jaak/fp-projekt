@@ -57,39 +57,51 @@ data Cell
 ```
 Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame palju miine selle ümbruses on. Seda esitab andmekonstruktori "Open" argument. Ei ole otsest vajadust esitada miiniga lahtreid, kuna ühe leidmine tähenda mängu kaotamist.
 
-Edasi tuleb realiseerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid "Coord" ja "Field" peavad toetama järgmist liidest:
+Edasi tuleb realiseerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid `Coord` ja `Field` peavad toetama järgmist liidest:
 
 1. Tühja väljaku loomist. Argumendid on vastavalt: väljaku kõrgus, väljaku laius, miinide arv. Võite eeldada, et seda funktsiooni ei kutsuta kunagi välja halbade argumentide väärtustega.
-```haskell
-emptyField :: Int -> Int -> Int -> Field
-emptyField = undefined
-```
+
+   ```haskell
+   emptyField :: Int -> Int -> Int -> Field
+   emptyField = undefined
+   ```
+
 2. Koordinaadi järgi väljaku lahtri otsimist. Funktsioon peab tagastama "Nothing" väärtuse, kui koordinaat on väljaku piiridest väljas.
-```haskell
-getCell :: Field -> Coord -> Maybe Cell
-getCell = undefined
-```
+
+    ```haskell
+    getCell :: Field -> Coord -> Maybe Cell
+    getCell = undefined
+    ```
+
 3. Naaberkoordinaatide otsimist. Loeme koordinaati iseenda naabriks.
-```haskell
-surroundingCoords :: Coord -> [Coord]
-surroundingCoords = undefined
-```
+
+    ```haskell
+    surroundingCoords :: Coord -> [Coord]
+    surroundingCoords = undefined
+    ```
+
 4. Väljakult naaberlahtrite otsimist. Lahtreid, mis ei jää väljaku piiridesse, ei tagastata.
-```haskell
-surroundingCells :: Field -> Coord -> [(Coord, Cell)]
-surroundingCells = undefined
-```
+
+    ```haskell
+    surroundingCells :: Field -> Coord -> [(Coord, Cell)]
+    surroundingCells = undefined
+    ```
+
 5. Väljaku sõneks teisendamist.
-```haskell
-showField :: Field -> String
-showField = undefined
-```
-Antud funktsiooni realiseerimisel võib kasuks tulla prelüüdi funktsioon "intersperse :: a -> [a] -> [a]".
+
+    ```haskell
+    showField :: Field -> String
+    showField = undefined
+    ```
+
+    Antud funktsiooni realiseerimisel võib kasuks tulla prelüüdi funktsioon "intersperse :: a -> [a] -> [a]".
+
 6. Väljaku lahtrite uuendamist.
-```haskell
-update :: [(Coord, Cell)] -> Field -> Field
-update = undefined
-```
+
+    ```haskell
+    update :: [(Coord, Cell)] -> Field -> Field
+    update = undefined
+    ```
 
 # Teine ülesanne
 
@@ -123,20 +135,23 @@ port = PortNumber 49267
 host :: HostName
 host = "127.0.0.1"
 ```
-Protokolli moodul "Prot" on imporditud 'qualified' võtmesõnaga, et vältida nimekonflikte.
+Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida nimekonflikte.
 
 Realiseerima peab järgmised funktsioonid:
 
 1. Teie väljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
-```haskell
-updateField :: [Prot.Open] -> [Prot.Coord] -> Field -> Field
-updateField = undefined
-```
+
+    ```haskell
+    updateField :: [Prot.Open] -> [Prot.Coord] -> Field -> Field
+    updateField = undefined
+    ```
+
 2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid või kanda lahendamisel kaasas mingit seisundite siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta.
-```haskell
-solveField :: Field -> ([Prot.Coord], [Prot.Coord])
-solveField = undefined
-```
+
+    ```haskell
+    solveField :: Field -> ([Prot.Coord], [Prot.Coord])
+    solveField = undefined
+    ```
 
 [1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
 [2]: http://hackage.haskell.org/platform/
