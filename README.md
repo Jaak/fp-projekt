@@ -181,18 +181,18 @@ soovite saada maksimum punkte siis 20% ekspert taseme väljakutest on piisav.
 
 Pakun välja järgnevaid algoritme:
 
-* Naiivne lahendaja.
+### Naiivne lahendaja
 
     Avab suvalise suletud lahtri.
 
-* Lihtne lahendaja.
+### Lihtne lahendaja
 
     Kui leidub avatud lahter märgendiga 'k', mille ümbruses on k ohtlikuks määratud väljakut siis võime avada kõik ümbritsevad kinnised lahtrid.
 
     Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
 
 
-* Tõenäosuslik.
+### Tõenäosuslik lahendaja
 
     Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks täpselt hinnata selle avamisel võitmise (kaotamise) tõenäosust.
 
@@ -208,7 +208,7 @@ Pakun välja järgnevaid algoritme:
 
     siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõeosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
 
-* Lineaarvõrrandisüsteeme lahendades.
+### Lineaarvõrrandisüsteeme lahendav lahendaja
 
     Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks.  Iga k miiniga avatud lahtri:
 
@@ -257,13 +257,13 @@ Pakun välja järgnevaid algoritme:
 
     Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja realiseerimine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
 
-* Alternatiivne.
+### Alternatiivne lahendaja
 
     Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
 
     Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam realiseerida.
 
-* Jõu meetodil.
+### Jõu meetodil lahendaja
 
     Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
 
