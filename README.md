@@ -1,8 +1,8 @@
 # Sissejuhatus
 
-Miiniotsija (minesweeper) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" positsioonid vältides nende lõhkamist.
+Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" positsioonid ning selle käigus vältides nende lõhkamist.
 
-Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või on selle lahtri all miin.  Igal sammul peab väljaku lahendaja märkima mõne suletud lahtri ohtlikuks või kontrollima, kas selle lahtri all on miin. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Lahtri ohtlikuks märkimine ei anna mängijale mingit tagasisidet. Mäng võidetakse, kui kõik miiniga lahtrid on märgitud ohtlikuks ning ülejäänud on avatud.
+Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja märkima mõne suletud lahtri ohtlikuks või kontrollima, kas selle lahtri all on miin. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Lahtri ohtlikuks märkimine ei anna mängijale mingit tagasisidet. Mäng võidetakse, kui kõik miiniga lahtrid on märgitud ohtlikuks ning ülejäänud on avatud.
 
 Kõiki miiniväljakuid ei ole võimalik lahendada, sest näiteks tühja väljaku kohta ei ole mängijal informatsiooni võimalike miinide positsioonide kohta. Arvestades, et lahtri ohtlikuks märkimine ei anna väljaku kohta informatsiooni juurde, siis väga tõenäoliselt mingil hetkel peab mängija tegema pimeda otsuse ja kontrollima, kas mingi lahtri all on miin või mitte.
 
@@ -28,14 +28,15 @@ avatakse automaatselt lisaks 8 lahtrit:
 ```
 Sellist lahtrite avamist jätkatakse rekursiivselt. Automaatne rekursiivne lahtrite avamine on realiseeritud ka meie miiniotsija mängu implementatsioonis.
 
-On teada, et miiniväljakute lahendamine on NP-keeruline probleem [1]. Ilma detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate üheks ülesandeks on kirjutada võimalikult tugev miiniväljakute lahendaja.
+On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Ilma detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate üheks ülesandeks on kirjutada võimalikult tugev miiniväljakute lahendaja.
 
 Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad järgmiselt:
-1. 10 punkti töötava lahenduse eest,
-2. 30 punkti lahendaja tugevuse eest ja
-3. 10 punkti koodi loetavuse eest.
 
-Ülesannete lahendamiseks võite kasutada HaskellPlatform [2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 24. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
+* 10 punkti töötava lahenduse eest,
+* 30 punkti lahendaja tugevuse eest ja
+* 10 punkti koodi loetavuse eest.
+
+Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 24. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
 
 # Esimene ülesanne
 
@@ -73,7 +74,7 @@ getCell = undefined
 surroundingCoords :: Coord -> [Coord]
 surroundingCoords = undefined
 ```
-4. Naaberlahtrite otsimist. Lahtreid, mis ei jää väljaku piiridesse, ei tagastata.
+4. Väljakult naaberlahtrite otsimist. Lahtreid, mis ei jää väljaku piiridesse, ei tagastata.
 ```haskell
 surroundingCells :: Field -> Coord -> [(Coord, Cell)]
 surroundingCells = undefined
@@ -99,6 +100,7 @@ update = undefined
 Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et server ei kontrolli väga usinalt kas klient järgib protokolli ning ei tegele ka vigadest taastumisega eriti hästi. Võib juhtuda, et serveri koodis on vigu ning kui arvate, et olete mõne leidnud, andke kindlasti teada.
 
 Ühe väljaku lahendamine toimub järgmiselt:
+
 1. Server saadab kliendile algse mänguväljaku konfiguratsiooni.
 2. Klient saadab serverile koordinaatide nimekirja lahtritest mis tuleb avada ja ohtlikuks märkida (ülimalt üks nimekirjadest võib olla tühi).
 3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2.
@@ -124,6 +126,7 @@ host = "127.0.0.1"
 Protokolli moodul "Prot" on imporditud 'qualified' võtmesõnaga, et vältida nimekonflikte.
 
 Realiseerima peab järgmised funktsioonid:
+
 1. Teie väljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
 ```haskell
 updateField :: [Prot.Open] -> [Prot.Coord] -> Field -> Field
@@ -134,3 +137,7 @@ updateField = undefined
 solveField :: Field -> ([Prot.Coord], [Prot.Coord])
 solveField = undefined
 ```
+
+[1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
+[2]: http://hackage.haskell.org/platform/
+[3]: http://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
