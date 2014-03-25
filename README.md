@@ -183,89 +183,87 @@ Pakun välja järgnevaid algoritme:
 
 ### Naiivne lahendaja
 
-    Avab suvalise suletud lahtri.
+Avab suvalise suletud lahtri.
 
 ### Lihtne lahendaja
 
-    Kui leidub avatud lahter märgendiga 'k', mille ümbruses on k ohtlikuks määratud väljakut siis võime avada kõik ümbritsevad kinnised lahtrid.
+Kui leidub avatud lahter märgendiga 'k', mille ümbruses on k ohtlikuks määratud väljakut siis võime avada kõik ümbritsevad kinnised lahtrid.
 
-    Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
+Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
 
 
 ### Tõenäosuslik lahendaja
 
-    Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks täpselt hinnata selle avamisel võitmise (kaotamise) tõenäosust.
+Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks täpselt hinnata selle avamisel võitmise (kaotamise) tõenäosust.
 
-    Näiteks, kui väljakul esineb selline konfiguratsioon (kus F tähistab, et antud lahtri all on miin):
+Näiteks, kui väljakul esineb selline konfiguratsioon (kus F tähistab, et antud lahtri all on miin):
 
-    ```
-    F F F
-    F   F
-    3   F
-    F   F
-    F F F
-    ```
+```
+F F F
+F   F
+3   F
+F   F
+F F F
+```
 
-    siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõeosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
+siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõeosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
 
 ### Lineaarvõrrandisüsteeme lahendav lahendaja
 
-    Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks.  Iga k miiniga avatud lahtri:
+Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks.  Iga k miiniga avatud lahtri:
 
-    ```
-    x1 x2 x3
-    x4  k x5
-    x6 x7 x8
-    ```
+```
+x1 x2 x3
+x4  k x5
+x6 x7 x8
+```
 
-    korral lisame süsteemi juurde võrrandi:
-    `x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k`
+korral lisame süsteemi juurde võrrandi:
+`x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k`
 
-    Näiteks (tähistades kinniseid lahtreid x'idega) väljakust:
+Näiteks (tähistades kinniseid lahtreid x'idega) väljakust:
 
-    ```
-    # #  #  #
-    # 0  1  x1
-    # 0  1  x2
-    # 0  1  x3
-    # 1  1  x4
-    # x7 x6 x5
-    ```
+```
+# #  #  #
+# 0  1  x1
+# 0  1  x2
+# 0  1  x3
+# 1  1  x4
+# x7 x6 x5
+```
 
-    konstrueerime võrrandite süsteemi:
+konstrueerime võrrandite süsteemi:
 
-    ```
-    x1 + x2                          = 1
-    x1 + x2 + x3                     = 1
-         x2 + x3 + x4                = 1
-              x3 + x4 + x5 + x6 + x7 = 1
-	                         x6 + x7 = 1
-    ```
+```
+x1 + x2                          = 1
+x1 + x2 + x3                     = 1
+     x2 + x3 + x4                = 1
+          x3 + x4 + x5 + x6 + x7 = 1
+                         x6 + x7 = 1
+```
 
-    Lahutades esimese võrrandi teisest saame kohe teada, et x3 = 0 ehk, et see
-    lahter on kindlasti ohutu. Edasi lihtsustades saame:
+Lahutades esimese võrrandi teisest saame kohe teada, et x3 = 0 ehk, et see lahter on kindlasti ohutu. Edasi lihtsustades saame:
 
-    ```
-    x4 = 0 ja x5 = 0 (sest x4 + x5 = 0)
-    x2 = 1
-    x1 = 0
-    x6 = 1 või x7 = 1 (sest x6 + x7 = 1)
-    ```
+```
+x4 = 0 ja x5 = 0 (sest x4 + x5 = 0)
+x2 = 1
+x1 = 0
+x6 = 1 või x7 = 1 (sest x6 + x7 = 1)
+```
 
-    Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja
-    avada võib lahtrid x1, x3, x4 ja x5.
+Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja avada võib lahtrid x1, x3, x4 ja x5.
 
-    Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja realiseerimine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
+Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja realiseerimine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
 
 ### Alternatiivne lahendaja
 
-    Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
+Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
 
-    Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam realiseerida.
+Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam realiseerida.
 
 ### Jõu meetodil lahendaja
 
-    Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
+Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
 
 [1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
 [2]: http://hackage.haskell.org/platform/
