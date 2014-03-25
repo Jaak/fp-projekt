@@ -42,7 +42,7 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 
 Esimeseks ülesandeks on miiniväljaku esitamine ning selle sõneks teisendamine. Implementeerima peab järgmise mooduli:
 ```haskell
-module Field (Cell(..), Coord(..), Field, emptyField, getCell, 
+module Field (Cell(..), Coord(..), Field, emptyField, getCell,
               surroundingCoords, surroundingCells, showField, update)
   where
 ```
@@ -50,7 +50,7 @@ Mooduli, funktsioonide ja tüüpide nimed võite valida oma voli järgi, aga ül
 
 Alustame lahtrite esitamisega algebralise andmetüübiga:
 ```haskell
-data Cell 
+data Cell
   = Closed
   | Open Int
   | Flagged
@@ -126,7 +126,7 @@ import qualified Prot
 import Field
 
 import Control.Exception (finally)
-import System.IO 
+import System.IO
 import Network
 
 port :: PortID
@@ -146,12 +146,108 @@ Realiseerima peab järgmised funktsioonid:
     updateField = undefined
     ```
 
-2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid või kanda lahendamisel kaasas mingit seisundite siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta.
+2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta.
 
     ```haskell
     solveField :: Field -> ([Prot.Coord], [Prot.Coord])
     solveField = undefined
     ```
+Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning realiseerib serveriga suhtluse. Kindlasti lisage protseduuri silumisel kasuks tulevaid sõnumeid. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
+
+```haskell
+game :: Handle -> IO ()
+game handle = do
+```
+
+Protseduuris `main` loome serveriga ühenduse ning kutsume protseduuri `game`.
+
+```haskell
+main :: IO ()
+main = withSocketsDo $ do
+  handle <- connectTo host port
+  hSetBuffering handle LineBuffering
+  (game handle `finally` hClose handle)
+```
+
+Projekti teise osa raam on veidi põhjalikumalt kommenteeritud failis 'Skeleton.hs'.
+
+## Lahendajate ideid
+
+Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks võite alustada lihtsa lahendajaga ning kui see ei anna tulemusi siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks langeda naiivse lahendaja algoritmi peale.
+
+Pakun välja järgnevaid algoritme:
+
+* Naiivne lahendaja.
+
+    Alati avab suvalise suletud lahtri.
+
+* Lihtne lahendaja.
+
+    Kui leidub avatud lahter märgendiga 'k', mille ümbruses on k ohtlikuks määratud väljakut siis võime avada kõik ümbritsevad kinnised lahtrid.
+
+    Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
+
+
+* Tõenäosuslik.
+
+    Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpse tõenäosuse hindamine ilmselt nõuab kõikide kombinatsioonide läbi vaatamist, küll aga võib tõenäosuslik lahendaja olla märgatav edasiminek naiivsest.
+
+* Lineaarvõrrandisüsteeme lahendades.
+
+    Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks.  Iga k miiniga avatud lahtri:
+
+    ```
+    x1 x2 x3
+    x4  k x5
+    x6 x7 x8
+    ```
+
+    korral lisame süsteemi juurde võrrandi:
+    x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k
+
+    Näiteks (tähistades kinniseid lahtreid x'idega):
+
+    ```
+    # #  #  #
+    # 0  1  x1
+    # 0  1  x2
+    # 0  1  x3
+    # 1  1  x4
+    # x7 x6 x5
+    ```
+
+    Saame võrrandite süsteemi:
+
+    ```
+    x1 + x2                          = 1
+    x1 + x2 + x3                     = 1
+         x2 + x3 + x4                = 1
+              x3 + x4 + x5 + x6 + x7 = 1
+	                         x6 + x7 = 1
+    ```
+
+    Lahutades esimese võrrandi teisest saame kohe teada, et x3 = 0 ehk, et see
+    lahter on kindlasti ohutu. Edasi lihtsustades saame:
+
+    ```
+    x4 = 0 ja x5 = 0 (sest x4 + x5 = 0)
+    x2 = 1
+    x1 = 0
+    x6 = 1 või x7 = 1 (sest x6 + x7 = 1)
+    ```
+
+    Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja
+    avada võib lahtrid x1, x3, x4 ja x5.
+
+* Alternatiivne.
+
+    Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
+
+    Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam realiseerida.
+
+* Jõu meetodil.
+
+    Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
 
 [1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
 [2]: http://hackage.haskell.org/platform/
