@@ -156,7 +156,7 @@ Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning realiseerib ser
 
 ```haskell
 game :: Handle -> IO ()
-game handle = do
+game handle = error "TODO: is not described yet!"
 ```
 
 Protseduuris `main` loome serveriga ühenduse ning kutsume protseduuri `game`.
@@ -173,13 +173,17 @@ Projekti teise osa raam on veidi põhjalikumalt kommenteeritud failis 'Skeleton.
 
 ## Lahendajate ideid
 
-Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks võite alustada lihtsa lahendajaga ning kui see ei anna tulemusi siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks langeda naiivse lahendaja algoritmi peale.
+Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks kõigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks langeda naiivse lahendaja algoritmi peale.
+
+Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme
+(99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui
+soovite saada maksimum punkte siis 20% ekspert taseme väljakutest on piisav.
 
 Pakun välja järgnevaid algoritme:
 
 * Naiivne lahendaja.
 
-    Alati avab suvalise suletud lahtri.
+    Avab suvalise suletud lahtri.
 
 * Lihtne lahendaja.
 
@@ -190,7 +194,19 @@ Pakun välja järgnevaid algoritme:
 
 * Tõenäosuslik.
 
-    Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpse tõenäosuse hindamine ilmselt nõuab kõikide kombinatsioonide läbi vaatamist, küll aga võib tõenäosuslik lahendaja olla märgatav edasiminek naiivsest.
+    Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks täpselt hinnata selle avamisel võitmise (kaotamise) tõenäosust.
+
+    Näiteks, kui väljakul esineb selline konfiguratsioon (kus F tähistab, et antud lahtri all on miin):
+
+    ```
+    F F F
+    F   F
+    3   F
+    F   F
+    F F F
+    ```
+
+    siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõeosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
 
 * Lineaarvõrrandisüsteeme lahendades.
 
@@ -203,9 +219,9 @@ Pakun välja järgnevaid algoritme:
     ```
 
     korral lisame süsteemi juurde võrrandi:
-    x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k
+    `x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k`
 
-    Näiteks (tähistades kinniseid lahtreid x'idega):
+    Näiteks (tähistades kinniseid lahtreid x'idega) väljakust:
 
     ```
     # #  #  #
@@ -216,7 +232,7 @@ Pakun välja järgnevaid algoritme:
     # x7 x6 x5
     ```
 
-    Saame võrrandite süsteemi:
+    konstrueerime võrrandite süsteemi:
 
     ```
     x1 + x2                          = 1
@@ -239,6 +255,8 @@ Pakun välja järgnevaid algoritme:
     Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja
     avada võib lahtrid x1, x3, x4 ja x5.
 
+    Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja realiseerimine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
+
 * Alternatiivne.
 
     Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
@@ -252,3 +270,6 @@ Pakun välja järgnevaid algoritme:
 [1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
 [2]: http://hackage.haskell.org/platform/
 [3]: http://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
+[4]: http://en.wikipedia.org/wiki/Gauss_elimination_method
+[5]: http://en.wikipedia.org/wiki/Integer_linear_programming
+[6]: http://en.wikipedia.org/wiki/Monte_carlo_method
