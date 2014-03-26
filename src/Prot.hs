@@ -1,85 +1,34 @@
-module Prot 
-  where
+module Prot where
 
-----
--- Kliendi nimi
-type Name = String
+data GameConf = GameConf {
+    _height    :: Int,
+    _width     :: Int,
+    _num_mines :: Int
+  }
+  deriving (Show, Read)
 
-----
--- Kliendi poolt genereeritud miinivälja esitus.
--- Iga tabeli väärtus peab kas olema 1 või 0 mis tähistavad
--- vastavalt kas antud positsioonis asub miin või mitte.
-type Board = [[Int]]
+-- Initial board is encoded in a string.
+-- ? or * denotes closed cell (it's unknown)
+-- F      denotes cell that has mine under it
+-- 0-8    denotes open cell and the number of mines next to it
+-- all other characters are ignored
+type InitialBoard = String
 
-----
--- Koordinaat.
--- Esimene komponent määrab tabeli rea (kõrgused) ning teine veeru (laiuse).
--- Ülemine vasak = (1, 1)
--- Parem alumine = (height, width)
+-- (x, y) coordinate
 type Coord = (Int, Int)
 
-----
--- Avatud koordinaar. Peale positsiooni teame nüüd ka kui palju miine antud
--- kordinaadi ümbruses leidub.
 data Open = Open Coord Int
   deriving (Show, Read)
 
-----
--- Mängu konfiguratsioon.
-data GameConf = GameConf {
-    height :: Int,
-    width :: Int,
-    nMines :: Int
-  }
+data GameOutcome = Win | Loss
   deriving (Show, Read)
 
-----
--- Mängu tulemus.
--- Loodetavasti viike on võimalikult vähe.
-data GameOutcome
-  = Win
-  | Tie
-  | Loss
+data ClientMessage = Clicks [Coord]
   deriving (Show, Read)
 
-----
--- Turnriiri tulemus.
--- Hetkel salvestame siin ainult saavutatud positsiooni. Selle andmetüübi
--- väljad võivad tulevikus muutuda.
-data Statistics = Statistics {
-    position :: (Int, Int)
-  }
-  deriving (Show, Read)
-
-----
--- Sõnumid mida klient võib serverile saata.
-data ClientMessage
-  = Hello Name
-  | Games [Board] -- Games <viiskümmend mängu>
-  | Clicks [Coord] [Coord] -- Clicks <vasakud klõpsud> <paremad klõpsud>
-  deriving (Show, Read)
-
-{-
- - Kliendi poolt saadetavate sõnumite järjekord peaks välja
- - nägema järgmine:
- -
- - Hello -> (Games -> Clicks*) x 50
- -}
-
-----
--- Sõnumida mida server võib kliendile saata.
 data ServerMessage
-  = NewGame Name GameConf
-  | NewRound
+  = NewGame GameConf InitialBoard
   | Opened [Open]
-  | RoundOver Double
   | GameOver GameOutcome
-  | End Statistics
+  | End
   deriving (Show, Read)
-
-{-
- - Eeldusel, et kliendid järgivad protokolli saadab server
- - fikseeritud kliendile järgmiselt sõnumeid:
- -
- - (NewGame -> (NewRound -> Opened* -> RoundOver) x 50 -> GameOver)* -> End
- -}
