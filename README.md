@@ -6,7 +6,7 @@ Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid
 
 Kõiki miiniväljakuid ei ole võimalik lahendada, sest näiteks tühja väljaku kohta ei ole mängijal informatsiooni võimalike miinide positsioonide kohta. Arvestades, et lahtri ohtlikuks märkimine ei anna väljaku kohta informatsiooni juurde, siis väga tõenäoliselt mingil hetkel peab mängija tegema pimeda otsuse ja kontrollima, kas mingi lahtri all on miin või mitte.
 
-Esimesel käigul kaotamine on ebameeldiv ja sellel põhjusel näiteks Windows keskkonna "minesweeper", erinevalt meie implementatsioonist, genereerib miinide asukohad alles pärast esimest käiku ning väldib miini valitud lahtrisse paigutamist. Kui avatud lahtri ümbruses ei ole ühtegi miini, avatakse automaatselt kõik seda ümbritsevad suletud lahtrid.  Näiteks, avades keskmise lahtri täielikult suletud väljakul mõõtmetega 5 x 5:
+Esimesel käigul kaotamine on ebameeldiv ja sellel põhjusel näiteks Windows keskkonna "minesweeper", erinevalt meie teostusest, genereerib miinide asukohad alles pärast esimest käiku ning väldib miini valitud lahtrisse paigutamist. Kui avatud lahtri ümbruses ei ole ühtegi miini, avatakse automaatselt kõik seda ümbritsevad suletud lahtrid.  Näiteks, avades keskmise lahtri täielikult suletud väljakul mõõtmetega 5 x 5:
 ```
 # # # # # # #
 #           #
@@ -26,7 +26,7 @@ avatakse automaatselt lisaks 8 lahtrit:
 #           #
 # # # # # # #
 ```
-Sellist lahtrite avamist jätkatakse rekursiivselt. Automaatne rekursiivne lahtrite avamine on realiseeritud ka meie miiniotsija mängu implementatsioonis.
+Sellist lahtrite avamist jätkatakse rekursiivselt. Automaatne rekursiivne lahtrite avamine on teostatud ka meie miiniotsija mängu teostus.
 
 On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Ilma detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate üheks ülesandeks on kirjutada võimalikult tugev miiniväljakute lahendaja.
 
@@ -57,7 +57,7 @@ data Cell
 ```
 Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame palju miine selle ümbruses on. Seda esitab andmekonstruktori "Open" argument. Ei ole otsest vajadust esitada miiniga lahtreid, kuna ühe leidmine tähenda mängu kaotamist.
 
-Edasi tuleb realiseerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid `Coord` ja `Field` peavad toetama järgmist liidest:
+Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid `Coord` ja `Field` peavad toetama järgmist liidest:
 
 1. Tühja väljaku loomist. Argumendid on vastavalt: väljaku kõrgus, väljaku laius, miinide arv. Võite eeldada, et seda funktsiooni ei kutsuta kunagi välja halbade argumentide väärtustega.
 
@@ -94,7 +94,7 @@ Edasi tuleb realiseerida andmetüüp või tüübisünonüüm koordinaatide ja v�
     showField = undefined
     ```
 
-    Antud funktsiooni realiseerimisel võib kasuks tulla prelüüdi funktsioon "intersperse :: a -> [a] -> [a]".
+    Antud funktsiooni teostamisel võib kasuks tulla prelüüdi funktsioon "intersperse :: a -> [a] -> [a]".
 
 6. Väljaku lahtrite uuendamist.
 
@@ -105,7 +105,7 @@ Edasi tuleb realiseerida andmetüüp või tüübisünonüüm koordinaatide ja v�
 
 # Teine ülesanne
 
-Ülesandeks on realiseerida serveriga suhtlus ning väljakute lahendaja.
+Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja.
 
 ## Serveriga suhtlus
 
@@ -118,7 +118,7 @@ Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et 
 3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2.
 4. Kui mäng on läbi antakse sellest kliendile teada.
 
-Alustame kliendi baaskoodiga. Peame importima protokolli, Teie realiseeritud mänguväljaku mooduli ning mõned süsteemi moodulid.
+Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemi moodulid.
 ```haskell
 module Main (main) where
 
@@ -152,7 +152,7 @@ Realiseerima peab järgmised funktsioonid:
     solveField :: Field -> ([Prot.Coord], [Prot.Coord])
     solveField = undefined
     ```
-Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning realiseerib serveriga suhtluse. Kindlasti lisage protseduuri silumisel kasuks tulevaid sõnumeid. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
+Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning teostab serveriga suhtluse. Kindlasti lisage protseduuri silumisel kasuks tulevaid sõnumeid. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
 
 ```haskell
 game :: Handle -> IO ()
@@ -173,7 +173,7 @@ Projekti teise osa raam on veidi põhjalikumalt kommenteeritud failis 'Skeleton.
 
 ## Lahendajate ideid
 
-Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valid.
+Konkreetse lahendaja teostamine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valid.
 
 Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme
 (99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui
@@ -251,13 +251,13 @@ x6 = 1 või x7 = 1 (sest x6 + x7 = 1)
 
 Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja avada võib lahtrid x1, x3, x4 ja x5.
 
-Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja realiseerimine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
+Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja teostamine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
 
 ### Alternatiivne lahendaja
 
 Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
 
-Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam realiseerida.
+Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam teostada.
 
 ### Jõu meetodil lahendaja
 
