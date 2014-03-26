@@ -5,13 +5,15 @@ module Field
 
 import Prot
 
-import System.Random
 import Data.Array
-import Data.Maybe
 import Data.Char (intToDigit)
+import qualified Data.Set as S
+import System.Random
 
 
-data C = C {-# UNPACK #-} !Int {-# UNPACK #-} !Int
+data C = C
+  {-# UNPACK #-} !Int
+  {-# UNPACK #-} !Int
   deriving (Show, Eq, Ord, Ix)
 
 data CellState
@@ -27,80 +29,66 @@ data Cell = Cell {
   }
 
 data Field = Field {
-    coordArray :: Array C Cell,
-    numMines   :: Int,
-    closedLeft :: Int,
-    flagsLeft  :: Int
+    coordArray :: !(Array C Cell),
+    numMines   :: !Int,
+    closedLeft :: !Int
   }
 
-getCells :: Field -> [C] -> [(C, Cell)]
-getCells field = mapMaybe (\coord -> (,) coord `fmap` getCell field coord)
-
-getCell :: Field -> C -> Maybe Cell
-getCell field coord
-  | inRange (bounds arr) coord = Just (arr ! coord)
-  | otherwise = Nothing
-  where
-    arr = coordArray field
-
-setCells :: [(C, Cell)] -> Field -> Field
-setCells xs field = field { coordArray = coordArray field // xs }
-
-surr :: Field -> C -> [(C, Cell)]
-surr field !coord = loop (getSurr coord)
-  where
-    arr = coordArray field
-    bnds = bounds arr
-    loop [] = []
-    loop (!x : xs)
-      | inRange bnds x = let !cell = arr ! x
-	                     !p = (x, cell)
-                           in p : loop xs
-      | otherwise = loop xs
-
-getSurr :: C -> [C]
-getSurr (C h w) = [C (h-1) (w-1), C (h-1) w, C (h-1) (w+1),
-                   C h (w-1),     C h w,     C h (w+1),
-                   C (h+1) (w-1), C (h+1) w, C (h+1) (w+1)]
-{-# INLINE getSurr #-}
+-- NB! (x, y) itself is excluded
+surrounding :: C -> [C]
+surrounding (C x y) = [C (x-1) (y-1), C (x-1) y, C (x-1) (y+1),
+                       C x     (y-1),            C x     (y+1),
+                       C (x+1) (y-1), C (x+1) y, C (x+1) (y+1)]
+{-# INLINE surrounding #-}
 
 data ClickResult
   = GameFinished GameOutcome
   | GameContinue Field [Open]
 
+openCell :: Cell -> Cell
+openCell cell = cell { cellState = CellOpen }
+
+mkOpen :: C -> Cell -> Open
+mkOpen (C x y) cell = Open (x, y) (surrMines cell)
+
 clicks :: [Coord] -> Field -> ClickResult
-clicks coords field = undefined
+clicks coords field
+  | any isBadCell cs = GameFinished Loss
+  | numOpened == closedLeft field = GameFinished Win
+  | otherwise = GameContinue updatedField (zipWith mkOpen cs' newCells)
+  where
+    arr = coordArray field
+    bnds = bounds arr
+    isBadCell c = not (inRange bnds c) || hasMine (arr ! c)
+
+    cs = map (uncurry C) coords
+    cs' = expandCoords S.empty cs
+    numOpened = length cs'
+
+    newCells = [openCell (arr ! c) | c <- cs']
+    updatedField = field {
+      closedLeft = closedLeft field - numOpened,
+      coordArray = arr // zip cs' newCells
+    }
+
+    expandCoords seen [] = S.elems seen
+    expandCoords seen (i : is)
+      | not (inRange bnds i) = expandCoords seen is
+      | i `S.member` seen = expandCoords seen is
+      | surrMines (arr ! i) == 0 = expandCoords seen' (surrounding i ++ is)
+      | otherwise = expandCoords seen' is
+      where seen' = S.insert i seen
 
 showField :: Field -> String
-showField field = showsField field ""
-
-showFieldShort :: Field -> String
-showFieldShort field = [showCell x y | x <- [0 .. w-1], y <- [0 .. h-1]]
+showField field = [showCell x y | x <- [0 .. w-1], y <- [0 .. h-1]]
   where
     (_, C w h) = bounds (coordArray field)
-    showCell x y = case getCell field (C x y) of
-      Just cell -> case cellState cell of
-        CellOpen -> intToDigit (surrMines cell)
-        CellFlagged -> 'F'
-        CellClosed -> '?'
-
-showsField :: Field -> ShowS
-showsField field =
-  shows (flagsLeft field) . showChar '\n' .
-  shows (closedLeft field) . showChar '\n' .
-  showLine [showLine [showChar ' ' . c (C i j) . showChar ' ' | j <- [-1..w]] | i <- [-1..h]]
-  where
-    (_, C h w) = bounds (coordArray field)
-    showLine [] = showChar '\n'
-    showLine (x : xs) = x . showLine xs
-    c coord = case getCell field coord of
-      Nothing -> showChar '#'
-      Just cell -> case cellState cell of
-        CellOpen -> if hasMine cell
-          then showChar '*'
-          else shows (surrMines cell)
-        CellFlagged -> showChar 'F'
-        CellClosed -> showChar '?'
+    arr = coordArray field
+    showCell x y = case cellState cell of
+      CellOpen -> intToDigit (surrMines cell)
+      CellFlagged -> 'F'
+      CellClosed -> '?'
+      where cell = arr ! C x y
 
 randomField :: Int -> Int -> Int -> StdGen -> Field
 randomField h w n = undefined
