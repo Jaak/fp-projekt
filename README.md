@@ -173,13 +173,11 @@ Projekti teise osa raam on veidi põhjalikumalt kommenteeritud failis 'Skeleton.
 
 ## Lahendajate ideid
 
-Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks kõigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks langeda naiivse lahendaja algoritmi peale.
+Konkreetse lahendaja realiseerimine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valid.
 
 Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme
 (99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui
 soovite saada maksimum punkte siis 20% ekspert taseme väljakutest on piisav.
-
-Pakun välja järgnevaid algoritme:
 
 ### Naiivne lahendaja
 
