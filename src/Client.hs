@@ -1,4 +1,4 @@
-import qualified Prot as Prot
+import qualified Prot
 import Field
 
 import Prelude hiding (ioError)
@@ -42,7 +42,7 @@ game handle = startGame
         Prot.GameOver status -> print status >> startGame
         _ -> raiseError "Expected \"Opened\" or \"GameOver\" message."
 
-    send msg = hPutStrLn handle (show msg)
+    send = hPrint handle
     recv = read <$> hGetLine handle
     raiseError = ioError . userError
 
@@ -50,4 +50,4 @@ main :: IO ()
 main = withSocketsDo $ do
   handle <- connectTo host port
   hSetBuffering handle LineBuffering
-  (game handle `finally` hClose handle)
+  game handle `finally` hClose handle

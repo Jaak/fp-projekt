@@ -120,7 +120,7 @@ Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et 
 
 Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemsed moodulid.
 ```haskell
-import qualified Prot as Prot
+import qualified Prot
 import Field
 
 import Prelude hiding (ioError)

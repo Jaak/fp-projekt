@@ -15,14 +15,14 @@ import System.Random
 type ClientHandle = Handle
 
 -- Server state
-data Server = Server {
+data ServerState = ServerState {
     _gen ::  MVar StdGen
   }
 
-type ServerM = ReaderT Server IO
+type ServerM = ReaderT ServerState IO
 
-mkServer :: IO Server
-mkServer = Server <$> (newMVar =<< newStdGen)
+mkServerState :: IO ServerState
+mkServerState = ServerState <$> (newMVar =<< newStdGen)
 
 clientThread :: ClientHandle -> ServerM ()
 clientThread client = do
@@ -49,7 +49,7 @@ singleGame client = do
 
     go currentBoard = do
       Clicks cs <- recvMsg client
-      when (null cs) $ do
+      when (null cs) $
         raiseUserError "Received empty list of clicks."
       case clicks cs currentBoard of
         GameFinished outcome -> sendMsg client (GameOver outcome)
@@ -74,7 +74,7 @@ recvMsg client = liftIO $ do
     Just x -> return x
 
 sendMsg :: ClientHandle -> ServerMessage -> ServerM ()
-sendMsg client msg = liftIO $ hPutStrLn client (show msg)
+sendMsg client = liftIO . hPrint client
 
 getGen :: ServerM StdGen
 getGen = do
@@ -82,21 +82,21 @@ getGen = do
   liftIO $ modifyMVar mgen (return . split)
 
 main :: IO ()
-main = withSocketsDo $ do
+main = withSocketsDo $
   withFile "log.txt" WriteMode $ \logHandle -> do
     hSetBuffering logHandle LineBuffering
-    server <- mkServer
+    server <- mkServerState
     withListenOn $ \soc -> forever $ do
       (handle, hostName, _) <- accept soc
       hPutStrLn logHandle ("Accepted connection from " ++ hostName)
       hSetBuffering handle LineBuffering
-      void . forkIO $ do
+      void . forkIO $
         runReaderT (clientThread handle) server
           `catch` logException logHandle
           `finally` hPutStrLn logHandle ("Closed connection with " ++ hostName)
   where
     logException :: Handle -> SomeException -> IO ()
-    logException hndl e = hPutStrLn hndl (show e)
+    logException = hPrint
 
 port :: PortID
 port = PortNumber 49267
