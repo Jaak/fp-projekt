@@ -2,11 +2,11 @@
 
 Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" positsioonid ning selle käigus vältides nende lõhkamist.
 
-Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja märkima mõne suletud lahtri ohtlikuks või kontrollima, kas selle lahtri all on miin. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Lahtri ohtlikuks märkimine ei anna mängijale mingit tagasisidet. Mäng võidetakse, kui kõik miiniga lahtrid on märgitud ohtlikuks ning ülejäänud on avatud.
+Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja avama mõne suletud lahtri. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Mäng võidetakse kui kõik ohutud lahtrid on avatud.
 
-Kõiki miiniväljakuid ei ole võimalik lahendada, sest näiteks tühja väljaku kohta ei ole mängijal informatsiooni võimalike miinide positsioonide kohta. Arvestades, et lahtri ohtlikuks märkimine ei anna väljaku kohta informatsiooni juurde, siis väga tõenäoliselt mingil hetkel peab mängija tegema pimeda otsuse ja kontrollima, kas mingi lahtri all on miin või mitte.
+Loomulikult ei ole kõiki miiniväljakuid võimalik lahendada, sest näiteks tühja väljaku kohta ei ole mängijal informatsiooni võimalike miinide positsioonide kohta ning seega mängija peab tegema pimeda valikud ja kontrollima, kas mingi lahtri all on miin või mitte.
 
-Esimesel käigul kaotamine on ebameeldiv ja sellel põhjusel näiteks Windows keskkonna "minesweeper", erinevalt meie teostusest, genereerib miinide asukohad alles pärast esimest käiku ning väldib miini valitud lahtrisse paigutamist. Kui avatud lahtri ümbruses ei ole ühtegi miini, avatakse automaatselt kõik seda ümbritsevad suletud lahtrid.  Näiteks, avades keskmise lahtri täielikult suletud väljakul mõõtmetega 5 x 5:
+Esimesel käigul kaotamine on ebameeldiv ja sellel põhjusel näiteks Windows keskkonna "minesweeper", erinevalt meie teostusest, genereerib miinide asukohad alles pärast esimest käiku ning väldib miini valitud lahtrisse paigutamist. Kui avatud lahtri ümbruses ei ole ühtegi miini, avatakse automaatselt kõik seda ümbritsevad suletud lahtrid (nii käitub ma meie teostus).  Näiteks, avades keskmise lahtri täielikult suletud väljakul mõõtmetega 5 x 5:
 ```
 # # # # # # #
 #           #
@@ -26,9 +26,9 @@ avatakse automaatselt lisaks 8 lahtrit:
 #           #
 # # # # # # #
 ```
-Sellist lahtrite avamist jätkatakse rekursiivselt. Meie miiniotsija mängu teostus avab samuti lahtreid rekursiivselt.
+Sellist lahtrite avamist jätkatakse rekursiivselt.
 
-On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev miiniväljakute lahendaja.
+On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev lahendaja.
 
 Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad järgmiselt:
 
@@ -117,7 +117,6 @@ Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et 
 2. Klient saadab serverile koordinaatide nimekirja avatavatest lahtritest.
 3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2. Serveri poolt saadetud koordinaatide nimikiri sisaldab kliendi poolt saadetud koordinaate aga võib ka enam koordinaate sisaldada kui tuli avada mõni lahter mille naabruses ei olnud ühtegi miini.
 4. Kui mäng on läbi antakse sellest kliendile teada.
-5. Minnakse punkti 1.
 
 Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemsed moodulid.
 ```haskell
