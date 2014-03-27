@@ -1,4 +1,4 @@
-import Field
+import Game
 import Prot
 
 import Control.Applicative
@@ -42,9 +42,9 @@ raiseUserError = liftIO . ioError . userError
 singleGame :: ClientHandle -> ServerM ()
 singleGame client = do
    let GameConf h w n = defaultConf
-   initialBoard <- randomField h w n <$> getGen
-   sendMsg client (NewGame defaultConf (showField initialBoard))
-   go initialBoard
+   initialGame <- randomGame h w n <$> getGen
+   sendMsg client (NewGame defaultConf (showGame initialGame))
+   go initialGame
    where
 
     go currentBoard = do
