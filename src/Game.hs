@@ -22,8 +22,8 @@ data C = C
 
 data Cell = Cell {
     _cell_surr     :: !Int,
-    _cell_is_open  :: !Bool,
-    _cell_has_mine :: !Bool
+    _cell_has_mine :: !Bool,
+    _cell_is_open  :: !Bool
   }
 
 data Game = Game {
@@ -127,7 +127,11 @@ mkGame h w mines opens = computeSurrCounts (Game arr n n)
     n = sum mines
     cells = zipWith mkCell mines opens
     arr = listArray (C 0 0, C (w - 1) (h - 1)) cells
-    mkCell hasMine isOpen = Cell 0 (isOpen == 1) (toEnum hasMine)
+    mkCell hasMine isOpen = Cell {
+      _cell_surr = 0,
+      _cell_has_mine = toEnum hasMine,
+      _cell_is_open = toEnum isOpen
+    }
 
 {-
  - Generate random game
@@ -146,4 +150,8 @@ randomGame h w n gen = computeSurrCounts (Game arr n n)
   where
     arr = listArray (C 0 0, C (w - 1) (h - 1)) initCell
     initCell = map mkCell $ randomBools (h*w) n gen
-    mkCell = Cell 0 False
+    mkCell hasMine = Cell {
+      _cell_surr = 0,
+      _cell_has_mine = hasMine,
+      _cell_is_open = False
+    }
