@@ -26,9 +26,9 @@ avatakse automaatselt lisaks 8 lahtrit:
 #           #
 # # # # # # #
 ```
-Sellist lahtrite avamist jätkatakse rekursiivselt. Automaatne rekursiivne lahtrite avamine on teostatud ka meie miiniotsija mängu teostus.
+Sellist lahtrite avamist jätkatakse rekursiivselt. Meie miiniotsija mängu teostus avab samuti lahtreid rekursiivselt.
 
-On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Ilma detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate üheks ülesandeks on kirjutada võimalikult tugev miiniväljakute lahendaja.
+On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev miiniväljakute lahendaja.
 
 Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad järgmiselt:
 
