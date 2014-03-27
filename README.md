@@ -55,7 +55,7 @@ data Cell
   | Open Int
   | Flagged
 ```
-Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame palju miine selle ümbruses on. Seda esitab andmekonstruktori "Open" argument. Ei ole otsest vajadust esitada miiniga lahtreid, kuna ühe leidmine tähenda mängu kaotamist.
+Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame palju miine selle ümbruses on. Seda esitab andmekonstruktori `Open` argument. Andmekonstruktor `Flagged` tähistab, et oleme tuvastanud, et antud lahtri all on kindlasti miin.
 
 Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid `Coord` ja `Field` peavad toetama järgmist liidest:
 
@@ -113,10 +113,11 @@ Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et 
 
 Ühe väljaku lahendamine toimub järgmiselt:
 
-1. Server saadab kliendile kas algse mänguväljaku konfiguratsiooni või teate, et töö on lõpetatud.
-2. Klient saadab serverile koordinaatide nimekirja lahtritest mis tuleb avada.
-3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2.
+1. Server saadab kliendile kas algse mänguväljaku konfiguratsiooni või teate, et töö on lõpetatud. Kui töö on lõpetatud siis server lõpetab kliendiga suhtlemise.
+2. Klient saadab serverile koordinaatide nimekirja avatavatest lahtritest.
+3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2. Serveri poolt saadetud koordinaatide nimikiri sisaldab kliendi poolt saadetud koordinaate aga võib ka enam koordinaate sisaldada kui tuli avada mõni lahter mille naabruses ei olnud ühtegi miini.
 4. Kui mäng on läbi antakse sellest kliendile teada.
+5. Minnakse punkti 1.
 
 Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemsed moodulid.
 ```haskell
