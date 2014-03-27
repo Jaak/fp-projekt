@@ -42,7 +42,7 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 
 Esimeseks ülesandeks on miiniväljaku esitamine ning selle sõneks teisendamine. Implementeerima peab järgmise mooduli:
 ```haskell
-module Field (Cell(..), Coord(..), Field, emptyField, getCell,
+module Field (Cell(..), Field, emptyField, getCell,
               surroundingCoords, surroundingCells, showField, update)
   where
 ```
@@ -113,19 +113,19 @@ Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et 
 
 Ühe väljaku lahendamine toimub järgmiselt:
 
-1. Server saadab kliendile algse mänguväljaku konfiguratsiooni.
-2. Klient saadab serverile koordinaatide nimekirja lahtritest mis tuleb avada ja ohtlikuks märkida (ülimalt üks nimekirjadest võib olla tühi).
+1. Server saadab kliendile kas algse mänguväljaku konfiguratsiooni või teate, et töö on lõpetatud.
+2. Klient saadab serverile koordinaatide nimekirja lahtritest mis tuleb avada.
 3. Kui mäng ei ole läbi saadab server vastuseks avatud koordinaatide nimekirja ning minnakse tagasi punkti 2.
 4. Kui mäng on läbi antakse sellest kliendile teada.
 
-Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemi moodulid.
+Alustame kliendi baaskoodiga. Peame importima protokolli, Teie teostatud mänguväljaku mooduli ning mõned süsteemsed moodulid.
 ```haskell
-module Main (main) where
-
-import qualified Prot
+import qualified Prot as Prot
 import Field
 
-import Control.Exception (finally)
+import Prelude hiding (ioError)
+import Control.Exception (finally, ioError)
+import Control.Applicative
 import System.IO
 import Network
 
@@ -137,26 +137,54 @@ host = "127.0.0.1"
 ```
 Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida nimekonflikte.
 
-Realiseerima peab järgmised funktsioonid:
+Teie ülesandeks jääb teostada järgmine:
 
-1. Teie väljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
+1. Väljaku initsialiseerimine algseisundiga. Andmetüüb `Prot.InitialBoard` on tüübisünonüüm sõnele ning selle formaat on kirjeldatud `Prot` moodulis.
 
     ```haskell
-    updateField :: [Prot.Open] -> [Prot.Coord] -> Field -> Field
+    initField :: Prot.GameConf -> Prot.InitialBoard -> Field
+    initField = undefined
+    ```
+
+2. Mänguväljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
+
+    ```haskell
+    updateField :: [Prot.Open] -> Field -> Field
     updateField = undefined
     ```
 
 2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta.
 
     ```haskell
-    solveField :: Field -> ([Prot.Coord], [Prot.Coord])
+    solveField :: Field -> [Prot.Coord]
     solveField = undefined
     ```
 Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning teostab serveriga suhtluse. Kindlasti lisage protseduuri silumisel kasuks tulevaid sõnumeid. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
 
 ```haskell
 game :: Handle -> IO ()
-game handle = error "TODO: is not described yet!"
+game handle = startGame
+  where
+
+    startGame = do
+      msg <- recv
+      case msg of
+        Prot.NewGame cfg initBoard -> playGame (initField cfg initBoard)
+        Prot.End -> return ()
+        _ -> raiseError "Expected \"NewGame\" or \"End\" message."
+
+    playGame currentBoard = do
+      let coords = solveField currentBoard
+      send (Prot.Clicks coords)
+      resp <- recv
+      case resp of
+        Prot.Opened os -> playGame (updateField os currentBoard)
+        Prot.GameOver status -> print status >> startGame
+        _ -> raiseError "Expected \"Opened\" or \"GameOver\" message."
+
+    send msg = hPutStrLn handle (show msg)
+    recv = read <$> hGetLine handle
+    raiseError = ioError . userError
 ```
 
 Protseduuris `main` loome serveriga ühenduse ning kutsume protseduuri `game`.
