@@ -133,6 +133,7 @@ mkGame h w mines opens = computeSurrCounts (Game arr n n)
  - Generate random game
  -}
 
+-- This is not perfect shuffle and it doesn't really matter!
 shuffle :: [a] -> StdGen -> [a]
 shuffle xs gen = map snd . sortBy (comparing fst) $ zip ns xs
   where ns = randoms gen :: [Int]
