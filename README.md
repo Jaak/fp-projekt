@@ -139,7 +139,7 @@ Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida ni
 
 Teie ülesandeks jääb teostada järgmine:
 
-1. Väljaku initsialiseerimine algseisundiga. Andmetüüb `Prot.InitialBoard` on tüübisünonüüm sõnele ning selle formaat on kirjeldatud `Prot` moodulis.
+1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle sõne formaat on kirjeldatud `Prot` moodulis.
 
     ```haskell
     initField :: Prot.GameConf -> Prot.InitialBoard -> Field
@@ -159,7 +159,8 @@ Teie ülesandeks jääb teostada järgmine:
     solveField :: Field -> [Prot.Coord]
     solveField = undefined
     ```
-Järgnev protseduur seob kokku eeldefineeritud funktsioonid ning teostab serveriga suhtluse. Kindlasti lisage protseduuri silumisel kasuks tulevaid sõnumeid. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
+
+Protseduur `game` seob kokku eeldefineeritud funktsioonid ning teostab serveriga suhtluse. Kindlasti täiendage seda protseduuri silumisel kasuks tulevate sõnumitega. Näiteks tuleb abiks kaotamisele eelneva väljaku seisundi ja tehtud otsuse välja printimine.
 
 ```haskell
 game :: Handle -> IO ()
@@ -187,7 +188,7 @@ game handle = startGame
     raiseError = ioError . userError
 ```
 
-Protseduuris `main` loome serveriga ühenduse ning kutsume protseduuri `game`.
+Protseduuris `main` loome serveriga ühenduse ja kutsub protseduuri `game`.
 
 ```haskell
 main :: IO ()
