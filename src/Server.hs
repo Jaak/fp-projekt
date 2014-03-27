@@ -1,16 +1,15 @@
-import Prot
 import Field
+import Prot
 
-import Prelude hiding (ioError)
-import System.Random
-import System.IO
-import Control.Concurrent.MVar
-import Control.Concurrent
-import Control.Monad
 import Control.Applicative
+import Control.Concurrent
+import Control.Exception (SomeException, bracket, catch, ioError, finally)
+import Control.Monad
 import Control.Monad.Reader
 import Network
-import Control.Exception (SomeException, bracket, catch, ioError, finally)
+import Prelude hiding (ioError)
+import System.IO
+import System.Random
 
 -- Client state
 type ClientHandle = Handle
