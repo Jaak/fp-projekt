@@ -1,6 +1,7 @@
-import Prelude hiding (ioError)
 import qualified Prot as Prot
+import Field
 
+import Prelude hiding (ioError)
 import Control.Exception (finally, ioError)
 import Control.Applicative
 import System.IO
@@ -11,8 +12,6 @@ port = PortNumber 49267
 
 host :: HostName
 host = "127.0.0.1"
-
-type Field = ()
 
 initField :: Prot.GameConf -> Prot.InitialBoard -> Field
 initField = undefined

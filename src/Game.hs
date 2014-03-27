@@ -11,7 +11,7 @@ import Data.Ord (comparing)
 import qualified Data.Set as S
 import System.Random
 
-{---
+{--
  - This is internal to server.
  --}
 
