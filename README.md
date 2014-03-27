@@ -105,7 +105,7 @@ Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja vä
 
 # Teine ülesanne
 
-Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja.
+Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja. Projekti teise osa raam asub failis 'Client.hs'.
 
 ## Serveriga suhtlus
 
@@ -197,8 +197,6 @@ main = withSocketsDo $ do
   hSetBuffering handle LineBuffering
   (game handle `finally` hClose handle)
 ```
-
-Projekti teise osa raam on veidi põhjalikumalt kommenteeritud failis 'Skeleton.hs'.
 
 ## Lahendajate ideid
 
