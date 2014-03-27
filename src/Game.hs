@@ -20,15 +20,9 @@ data C = C
   {-# UNPACK #-} !Int
   deriving (Show, Eq, Ord, Ix)
 
-data CellState
-  = CellOpen
-  | CellFlagged
-  | CellClosed
-  deriving (Eq, Ord, Show, Read)
-
 data Cell = Cell {
     _cell_surr     :: !Int,
-    _cell_state    :: !CellState,
+    _cell_is_open  :: !Bool,
     _cell_has_mine :: !Bool
   }
 
@@ -68,7 +62,7 @@ clicks coords game
       _game_cells = arr // zip cs' newCells
     }
 
-    openCell cell = cell { _cell_state = CellOpen }
+    openCell cell = cell { _cell_is_open = True }
 
     mkOpen (C x y) cell = Open (x, y) (_cell_surr cell)
 
@@ -76,18 +70,21 @@ clicks coords game
     expandCoords seen (i : is)
       | not (inRange bnds i) = expandCoords seen is
       | i `S.member` seen = expandCoords seen is
-      | _cell_surr (arr ! i) == 0 = expandCoords seen' (surrounding i ++ is)
+      | _cell_is_open cell = expandCoords seen is
+      | _cell_surr cell == 0 = expandCoords seen' (surrounding i ++ is)
       | otherwise = expandCoords seen' is
-      where seen' = S.insert i seen
+      where
+        cell = arr ! i
+        seen' = S.insert i seen
 
 showGame :: Game -> String
 showGame game = [showCell x y | y <- [h - 1, h - 2 .. 0], x <- [0 .. w-1]]
   where
     (_, C w h) = bounds (_game_cells game)
-    showCell x y = case _cell_state cell of
-      CellOpen -> intToDigit (_cell_surr cell)
-      CellFlagged -> 'F'
-      CellClosed -> '?'
+    showCell x y
+      | not (_cell_is_open cell) = '?'
+      | _cell_has_mine cell = 'F'
+      | otherwise = intToDigit (_cell_surr cell)
       where cell = _game_cells game ! C x y
 
 computeSurrCounts :: Game -> Game
@@ -130,7 +127,7 @@ mkGame h w mines opens = computeSurrCounts (Game arr n n)
     n = sum mines
     cells = zipWith mkCell mines opens
     arr = listArray (C 0 0, C (w - 1) (h - 1)) cells
-    mkCell hasMine isOpen = Cell 0 (if isOpen == 1 then CellOpen else CellClosed) (toEnum hasMine)
+    mkCell hasMine isOpen = Cell 0 (isOpen == 1) (toEnum hasMine)
 
 {-
  - Generate random game
@@ -148,4 +145,4 @@ randomGame h w n gen = computeSurrCounts (Game arr n n)
   where
     arr = listArray (C 0 0, C (w - 1) (h - 1)) initCell
     initCell = map mkCell $ randomBools (h*w) n gen
-    mkCell = Cell 0 CellClosed
+    mkCell = Cell 0 False
