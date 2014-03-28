@@ -130,7 +130,7 @@ reads01s s0 = do
   return (n : ns, s2)
 
 mkGame :: Int -> Int -> [Int] -> [Int] -> Game
-mkGame h w mines opens = computeSurrCounts (Game arr n n)
+mkGame h w mines opens = computeSurrCounts game
   where
     n = sum mines
     cells = zipWith mkCell mines opens
@@ -139,6 +139,12 @@ mkGame h w mines opens = computeSurrCounts (Game arr n n)
       _cell_surr = 0,
       _cell_has_mine = toEnum hasMine,
       _cell_is_open = toEnum isOpen
+    }
+
+    game = Game {
+      _game_cells = arr,
+      _game_num_mines = n,
+      _game_closed_left = h*w - length opens
     }
 
 {-
@@ -154,7 +160,7 @@ randomBools :: Int -> Int -> StdGen -> [Bool]
 randomBools n k = shuffle (take n $ replicate k True ++ repeat False)
 
 randomGame :: Int -> Int -> Int -> StdGen -> Game
-randomGame h w n gen = computeSurrCounts (Game arr n n)
+randomGame h w n gen = computeSurrCounts game
   where
     arr = listArray (C 0 0, C (w - 1) (h - 1)) initCell
     initCell = map mkCell $ randomBools (h*w) n gen
@@ -162,4 +168,10 @@ randomGame h w n gen = computeSurrCounts (Game arr n n)
       _cell_surr = 0,
       _cell_has_mine = hasMine,
       _cell_is_open = False
+    }
+
+    game = Game {
+      _game_cells = arr,
+      _game_num_mines = n,
+      _game_closed_left = h*w
     }
