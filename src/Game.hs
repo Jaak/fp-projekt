@@ -1,4 +1,4 @@
-module Game (ClickResult(..), Game, clicks, showGame, readGame, randomGame)
+module Game (ClickResult(..), Game, clicks, showGame, readGame, randomGame, getGameConf)
   where
 
 import Prot
@@ -31,6 +31,14 @@ data Game = Game {
     _game_num_mines   :: !Int,
     _game_closed_left :: !Int
   }
+
+getGameConf :: Game -> Prot.GameConf
+getGameConf game = Prot.GameConf {
+    _height = h,
+    _width = w,
+    _num_mines = _game_num_mines game
+  }
+  where (_, C w h) = bounds (_game_cells game)
 
 surrounding :: C -> [C]
 surrounding (C x y) = [C (x-1) (y-1), C (x-1) y, C (x-1) (y+1),
