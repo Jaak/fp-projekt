@@ -36,7 +36,7 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 * 30 punkti lahendaja tugevuse eest ja
 * 10 punkti koodi loetavuse eest.
 
-Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 24. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
+Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 27. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
 
 # Esimene ülesanne
 
@@ -290,9 +290,30 @@ Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioo
 
 Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
 
+# Alternatiivülesanded
+
+Igat lisaülesannet saab lahendada ainult üks tudeng. Hinne kujuneb järgmiselt: vähemalt 10 punkti saab nõuetele vastava lahenduse eest ning ülejäänud punktid kujunevad lahenduse kvaliteedi ning koodi loetavuse pealt. Kuna alternatiivsed ülesanded on keerukamad kui põhiülesanne siis mängin piiratud koguses juhendaja rolli.
+
+## Graafiline kasutajaliides
+
+Ülesandeks on teostada graafiline kasutajaliides miiniotsija mängule mis integreerub meie serveriga. See oleks väga kasulik testimiseks. Teostus peab kasutajaga interakteeruma analoogselt Windows keskkonna minesweeperiga: lahtreid peab saama avada vasaku hiireklõpsuga, ohtlikuks märkida parema hiireklõpsuga ning kesmine hiireklõps peab avama kõik ohtlikuks märgitud lahtrit ümbritsevad lahtrid.
+
+Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning kasutada võib mistahes linux keskkonda toetavat graafikateeki (vaata http://hackage.haskell.org/packages/#cat:Graphics ja http://hackage.haskell.org/packages/#cat:GUI).
+
+## Täieliku informatsiooniga miiniotsija
+
+Ülesandeks on teostada käsureaprogramm mis saab sisendiks arvude tabeli ning alati annab väljundiks kas ühe miiniväljaku konfiguratsiooni (0-1 tabeli) mille iga lahtri naabrite arvud vastavad sisendtabelile või teatab, et vastavat väljakut ei leidu. Soovin algoritmi mis töötaks kiiresti ka suurte sisendite puhul.
+
+## Loogikavalemitest väljakute genereerija
+
+Ülesandeks on teostada käsureaprogramm mis saab sisendiks loogikavalemi (vabad muutujad, konjunktsioon, disjunktsioon ning eitus) ning väljundiks annab miiniväljaku konfiguratsiooni mis on lahenduv parajasti siis kui sisendvalem on kehtestatav. Eeskiri kuidas valemeid teisendada miiniväljakuteks on ette [määratud][7]. Peamine keerukus seisneb selles kuidas väikesed väljakutükid omavahel kombineerida.
+
+
+
 [1]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
 [2]: http://hackage.haskell.org/platform/
 [3]: http://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
 [4]: http://en.wikipedia.org/wiki/Gauss_elimination_method
 [5]: http://en.wikipedia.org/wiki/Integer_linear_programming
 [6]: http://en.wikipedia.org/wiki/Monte_carlo_method
+[7]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/minesw.pdf
