@@ -36,44 +36,46 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 * 30 punkti lahendaja tugevuse eest ja
 * 10 punkti koodi loetavuse eest.
 
-Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 27. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
+Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 30. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
+
+Ülesanne on jagatud kaheks alamosaks, et pakkuda natuke struktuuri ning ideid kuidas alustada. Seda struktuuri ei pea järgima ning Teie lahendaja võib välja näha hoopis teistsugune.
 
 # Esimene ülesanne
 
-Esimeseks ülesandeks on miiniväljaku esitamine ning selle sõneks teisendamine. Implementeerima peab järgmise mooduli:
+Esimeseks ülesandeks on miiniväljaku esitamine ning selle sõneks teisendamine. Esimese osa raam asub failis `Field.hs`. Implementeerima peab järgmise mooduli:
 ```haskell
 module Field (Cell(..), Field, emptyField, getCell,
               surroundingCoords, surroundingCells, showField, update)
   where
 ```
-Mooduli, funktsioonide ja tüüpide nimed võite valida oma voli järgi, aga ülesande kirjelduses kasutame inglise keelseid nimetusi.
+Mooduli, funktsioonide ja tüüpide nimed võite valida oma voli järgi, aga ülesande kirjelduses kasutame inglisekeelseid nimetusi.
 
-Alustame lahtrite esitamisega algebralise andmetüübiga:
+Väljaku lahtrit esitamisega algebralise andmetüübiga:
 ```haskell
 data Cell
   = Closed
   | Open Int
   | Flagged
 ```
-Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame palju miine selle ümbruses on. Seda esitab andmekonstruktori `Open` argument. Andmekonstruktor `Flagged` tähistab, et oleme tuvastanud, et antud lahtri all on kindlasti miin.
+Iga mängu lahter on ühes kolmest olekust: suletud, avatud või märgitud. Lisaks on vaja arvestada sellega, et avatud lahtrite kohta teame kui palju miine selle ümbruses on. Seda esitab andmekonstruktori `Open` argument. Andmekonstruktor `Flagged` tähistab, et oleme tuvastanud, et antud lahtri all on kindlasti miin.
 
-Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja väljaku esitamiseks. Tüübid `Coord` ja `Field` peavad toetama järgmist liidest:
+Edasi tuleb defineerida andmetüüp (või tüübisünonüüm) väljaku esitamiseks. Andmestruktuuri valik on vaba aga üks hea valik on `Data.Map` moodulis asuv `Map` andmestruktuur. Andmetüüp `Field` peab toetama järgmist liidest:
 
-1. Tühja väljaku loomist. Argumendid on vastavalt: väljaku kõrgus, väljaku laius, miinide arv. Võite eeldada, et seda funktsiooni ei kutsuta kunagi välja halbade argumentide väärtustega.
+1. Tühja väljaku loomist. Tühjaks väljakuks loeme sellist mille lahtrite kohta ei ole meil mingit informatsiooni teada (kõik lahtrid on suletud). Argumendid on vastavalt: väljaku kõrgus, väljaku laius, miinide arv. Võite eeldada, et seda funktsiooni ei kutsuta kunagi välja halbade argumentide väärtustega.
 
    ```haskell
    emptyField :: Int -> Int -> Int -> Field
    emptyField = undefined
    ```
 
-2. Koordinaadi järgi väljaku lahtri otsimist. Funktsioon peab tagastama "Nothing" väärtuse, kui koordinaat on väljaku piiridest väljas.
+2. Koordinaadi järgi väljaku lahtri otsimist. Funktsioon peab tagastama `Nothing` väärtuse, kui koordinaat on väljaku piiridest väljas.
 
     ```haskell
     getCell :: Field -> Coord -> Maybe Cell
     getCell = undefined
     ```
 
-3. Naaberkoordinaatide otsimist. Loeme koordinaati iseenda naabriks.
+3. Naaberkoordinaatide otsimist.
 
     ```haskell
     surroundingCoords :: Coord -> [Coord]
@@ -87,14 +89,14 @@ Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja vä
     surroundingCells = undefined
     ```
 
-5. Väljaku sõneks teisendamist.
+5. Väljaku sõneks teisendamist. See funktsioon võib osutuda kasulikuks lahendaja silumisel.
 
     ```haskell
     showField :: Field -> String
     showField = undefined
     ```
 
-    Antud funktsiooni teostamisel võib kasuks tulla prelüüdi funktsioon "intersperse :: a -> [a] -> [a]".
+    Antud funktsiooni teostamisel tulevad kasuks prelüüdi funktsioonid `words` ja `lines`.
 
 6. Väljaku lahtrite uuendamist.
 
@@ -105,7 +107,7 @@ Edasi tuleb defineerida andmetüüp või tüübisünonüüm koordinaatide ja vä
 
 # Teine ülesanne
 
-Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja. Projekti teise osa raam asub failis 'Client.hs'.
+Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja. Projekti teise osa raam asub failis `Client.hs`.
 
 ## Serveriga suhtlus
 
@@ -139,7 +141,7 @@ Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida ni
 
 Teie ülesandeks jääb teostada järgmine:
 
-1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle sõne formaat on kirjeldatud `Prot` moodulis.
+1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle sõne formaat on kirjeldatud `Prot` moodulis. Selle funktsiooni teostamisel luua esmalt tühi väljaks ning seejärel selles sättida lahtrid kasutades `update` funktsiooni.
 
     ```haskell
     initField :: Prot.GameConf -> Prot.InitialBoard -> Field
@@ -153,7 +155,7 @@ Teie ülesandeks jääb teostada järgmine:
     updateField = undefined
     ```
 
-2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta.
+2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta. Soovitan silumise eesmärgil mitte kasutada `IO` monaadi kuna ajutisi sõnumeid saab printida kasutades ka `Debug.Trace` moodulist asuvat `trace` funktsiooni.
 
     ```haskell
     solveField :: Field -> [Prot.Coord]
@@ -188,19 +190,19 @@ game handle = startGame
     raiseError = ioError . userError
 ```
 
-Protseduuris `main` loome serveriga ühenduse ja kutsub protseduuri `game`.
+Protseduuris `main` loome serveriga ühenduse ja kutsume protseduuri `game`.
 
 ```haskell
 main :: IO ()
 main = withSocketsDo $ do
   handle <- connectTo host port
   hSetBuffering handle LineBuffering
-  (game handle `finally` hClose handle)
+  game handle `finally` hClose handle
 ```
 
 ## Lahendajate ideid
 
-Konkreetse lahendaja teostamine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valid.
+Konkreetse lahendaja teostamine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valik.
 
 Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme
 (99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui
@@ -208,18 +210,18 @@ soovite saada maksimum punkte siis 20% ekspert taseme väljakutest on piisav.
 
 ### Naiivne lahendaja
 
-Avab suvalise suletud lahtri.
+Avab esimese ettejuhtuva (või juhuslikult valitud) suletud lahtri.
 
 ### Lihtne lahendaja
 
-Kui leidub avatud lahter märgendiga 'k', mille ümbruses on k ohtlikuks määratud väljakut siis võime avada kõik ümbritsevad kinnised lahtrid.
+Kui leidub avatud lahter mille ümbruses on 'k' miini ning täpselt 'k' miini on juba ohtlikuks määratud siis võime avada kõik ümbritsevad kinnised lahtrid.
 
 Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
 
 
 ### Tõenäosuslik lahendaja
 
-Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks täpselt hinnata selle avamisel võitmise (kaotamise) tõenäosust.
+Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks hinnata selle avamisel võitmise (kaotamise) tõenäosust.
 
 Näiteks, kui väljakul esineb selline konfiguratsioon (kus F tähistab, et antud lahtri all on miin):
 
@@ -231,7 +233,7 @@ F   F
 F F F
 ```
 
-siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõeosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
+siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõenäosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
 
 ### Lineaarvõrrandisüsteeme lahendav lahendaja
 
@@ -243,8 +245,7 @@ x4  k x5
 x6 x7 x8
 ```
 
-korral lisame süsteemi juurde võrrandi:
-`x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k`
+korral lisame süsteemi võrrandi: `x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 = k` Kui mõni neist muutujates on avatud või ohtlikuks määratud siis asendame selle vastavalt kas väärtusega 0 või 1.
 
 Näiteks (tähistades kinniseid lahtreid x'idega) väljakust:
 
@@ -273,7 +274,7 @@ Lahutades esimese võrrandi teisest saame kohe teada, et x3 = 0 ehk, et see laht
 x4 = 0 ja x5 = 0 (sest x4 + x5 = 0)
 x2 = 1
 x1 = 0
-x6 = 1 või x7 = 1 (sest x6 + x7 = 1)
+x6 = 1 XOR x7 = 1 (sest x6 + x7 = 1)
 ```
 
 Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja avada võib lahtrid x1, x3, x4 ja x5.
