@@ -150,7 +150,6 @@ Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida ni
 Teie ülesandeks jääb teostada järgmine (ei pea asuma `Client.hs` failis):
 
 1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle formaat on järgmine:
-
     * sõne pikkuseks on väljaku lahtrite arv,
     * esimene märk vastab ülemisele vasakule lahtrile ning viimane alumisele paremale,
     * tähemärk `F` tähistab miini, `?` tähistab suletud lahtrit ning numbrid `0` kuni `8` tähistavad avatud lahtrit vastavate ümbritsevate miinide arvuga.
@@ -161,7 +160,6 @@ Teie ülesandeks jääb teostada järgmine (ei pea asuma `Client.hs` failis):
     ```
 
     Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
-
 2. Mänguväljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
 
     ```haskell
