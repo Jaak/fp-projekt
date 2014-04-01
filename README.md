@@ -155,7 +155,7 @@ Teie ülesandeks jääb teostada järgmine (teostused ei pea asuma `Client.hs` f
     * esimene märk vastab ülemisele vasakule lahtrile ning viimane alumisele paremale,
     * tähemärk `F` tähistab miini, `?` tähistab suletud lahtrit ning numbrid `0` kuni `8` tähistavad avatud lahtrit vastavate ümbritsevate miinide arvuga.
 
-Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
+    Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
 
     ```haskell
     initField :: Prot.GameConf -> Prot.InitialBoard -> Field
