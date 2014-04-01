@@ -59,6 +59,10 @@ readFlag args = tryRandom args `mplus` tryPreset args
     tryPreset _ = Nothing
 
 -- TODO: no error checking whatsoever
+-- Load games based on the set flags.
+-- We are returning a closure under the io action because we need to consider two cases:
+-- 1. We generate a random sequence of games. This sequence is different for every client.
+-- 2. We load a preset sequence of games from a file and always return those. In this case the StdGen is ignored.
 loadGames :: Flag -> IO (StdGen -> [Game])
 loadGames (FlagRandom n m h w) = return $ map (randomGame h w m) . splitStdGenN n
 loadGames (FlagPreset files) = do

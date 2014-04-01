@@ -1,5 +1,5 @@
-module Field (Cell(..), Field, emptyField, getCell,
-              surroundingCoords, surroundingCells, showField, update)
+module Field (Cell(..), Field, emptyField, getCell, setCell, setCells,
+              surroundingCoords, surroundingCells, showField)
   where
 
 import Prot
@@ -17,6 +17,12 @@ emptyField = undefined
 getCell :: Field -> Coord -> Maybe Cell
 getCell = undefined
 
+setCell :: Coord -> Cell -> Field -> Field
+setCell = undefined
+
+setCells :: [(Coord, Cell)] -> Field -> Field
+setCells = undefined
+
 surroundingCoords :: Coord -> [Coord]
 surroundingCoords = undefined
 
@@ -25,6 +31,3 @@ surroundingCells = undefined
 
 showField :: Field -> String
 showField = undefined
-
-update :: [(Coord, Cell)] -> Field -> Field
-update = undefined
