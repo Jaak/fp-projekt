@@ -1,6 +1,6 @@
 # Sissejuhatus
 
-Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" positsioonid ning selle käigus vältides nende lõhkamist.
+Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist.
 
 Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja avama mõne suletud lahtri. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Mäng võidetakse kui kõik ohutud lahtrid on avatud.
 
@@ -36,7 +36,7 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 * 30 punkti lahendaja tugevuse eest ja
 * 10 punkti koodi loetavuse eest.
 
-Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste saatmise viimane tähtaeg on 30. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Ülesannete lahendamisel ei ole vaja muretseda programmi efektiivsuse pärast liiga palju, küll tasub mõelda algoritmide ajalise keerukuse peal.
+Ülesannete lahendamiseks võite kasutada [HaskellPlatform][2] teeki kuuluvaid mooduleid. Lubatud ei ole "unsafe" prefiksiga funktsioonide kasutamine. Lahenduste esitamise viimane tähtaeg on 30. mai. Kui saadate lahenduse vähemalt nädal varem annan Teile tagasisidet ning võimaluse lahendust parandada. Mida varem Te oma lahenduse esitate seda rohkem võimalusi on Teil minu tagasisidet saada ja oma lahendust parandada.
 
 Ülesanne on jagatud kaheks alamosaks, et pakkuda natuke struktuuri ning ideid kuidas alustada. Seda struktuuri ei pea järgima ning Teie lahendaja võib välja näha hoopis teistsugune.
 
@@ -50,7 +50,7 @@ module Field (Cell(..), Field, emptyField, getCell,
 ```
 Mooduli, funktsioonide ja tüüpide nimed võite valida oma voli järgi, aga ülesande kirjelduses kasutame inglisekeelseid nimetusi.
 
-Väljaku lahtrit esitamisega algebralise andmetüübiga:
+Väljaku lahtrit esitame järgneva algebralise andmetüübiga:
 ```haskell
 data Cell
   = Closed
@@ -68,42 +68,50 @@ Edasi tuleb defineerida andmetüüp (või tüübisünonüüm) väljaku esitamise
    emptyField = undefined
    ```
 
-2. Koordinaadi järgi väljaku lahtri otsimist. Funktsioon peab tagastama `Nothing` väärtuse, kui koordinaat on väljaku piiridest väljas.
+2. Koordinaadi järgi väljaku lahtri otsimist. Funktsioon peab tagastama `Nothing` väärtuse, kui koordinaat on väljaku piiridest väljas. Koordinaat `Coord` on defineeritud failis `Prot.hs` kui tüübisünonüüm täisarvude paari jaoks.
 
     ```haskell
     getCell :: Field -> Coord -> Maybe Cell
     getCell = undefined
     ```
 
-3. Naaberkoordinaatide otsimist.
+3. Väljaku lahtri uuendamist.
+
+    ```haskell
+    setCell :: Coord -> Cell -> Field -> Field
+    setCell = undefined
+    ```
+
+    Kasuks tuleb ka versioon funktsioonist mis uuendab palju lahtreid korraga.
+
+    ```haskell
+    setCells :: [(Coord, Cell)] -> Field -> Field
+    setCells = undefined
+    ```
+
+
+4. Naaberkoordinaatide otsimist.
 
     ```haskell
     surroundingCoords :: Coord -> [Coord]
     surroundingCoords = undefined
     ```
 
-4. Väljakult naaberlahtrite otsimist. Lahtreid, mis ei jää väljaku piiridesse, ei tagastata.
+5. Väljakult naaberlahtrite otsimist. Lahtreid, mis ei jää väljaku piiridesse, ei tagastata.
 
     ```haskell
     surroundingCells :: Field -> Coord -> [(Coord, Cell)]
     surroundingCells = undefined
     ```
 
-5. Väljaku sõneks teisendamist. See funktsioon võib osutuda kasulikuks lahendaja silumisel.
+6. Väljaku sõneks teisendamist. See funktsioon võib osutuda kasulikuks lahendaja silumisel.
 
     ```haskell
     showField :: Field -> String
     showField = undefined
     ```
 
-    Antud funktsiooni teostamisel tulevad kasuks prelüüdi funktsioonid `words` ja `lines`.
-
-6. Väljaku lahtrite uuendamist.
-
-    ```haskell
-    update :: [(Coord, Cell)] -> Field -> Field
-    update = undefined
-    ```
+    Antud funktsiooni teostamisel tulevad kasuks prelüüdi funktsioonid `unwords` ja `unlines`.
 
 # Teine ülesanne
 
@@ -111,9 +119,9 @@ Edasi tuleb defineerida andmetüüp (või tüübisünonüüm) väljaku esitamise
 
 ## Serveriga suhtlus
 
-Serveriga suhtluse protokoll on kirjeldatud failis "Prot.hs". Tuleb mainida, et server ei kontrolli väga usinalt kas klient järgib protokolli ning ei tegele ka vigadest taastumisega eriti hästi. Võib juhtuda, et serveri koodis on vigu ning kui arvate, et olete mõne leidnud, andke kindlasti teada.
+Kõik serveriga suhtluse kasutatavad andmestruktuurid on defineeritud failis `Prot.hs`. Tuleb mainida, et server ei kontrolli väga usinalt kas klient järgib protokolli ning ei tegele ka vigadest taastumisega eriti hästi. Võib juhtuda, et serveri koodis on vigu ning kui arvate, et olete mõne leidnud, andke kindlasti teada.
 
-Ühe väljaku lahendamine toimub järgmiselt:
+Ühe väljaku lahendamine toimub järgmise protokolli alusel:
 
 1. Server saadab kliendile kas algse mänguväljaku konfiguratsiooni või teate, et töö on lõpetatud. Kui töö on lõpetatud siis server lõpetab kliendiga suhtlemise.
 2. Klient saadab serverile koordinaatide nimekirja avatavatest lahtritest.
@@ -139,9 +147,15 @@ host = "127.0.0.1"
 ```
 Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida nimekonflikte.
 
-Teie ülesandeks jääb teostada järgmine:
+Teie ülesandeks jääb teostada järgmine (teostused ei pea asuma `Client.hs` failis):
 
-1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle sõne formaat on kirjeldatud `Prot` moodulis. Selle funktsiooni teostamisel luua esmalt tühi väljaks ning seejärel selles sättida lahtrid kasutades `update` funktsiooni.
+1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle formaat on järgmine:
+
+    * selle pikkuseks on väljaku lahtrite arv,
+    * esimene märk vastab ülemisele vasakule lahtrile ning viimane alumisele paremale,
+    * tähemärk `F` tähistab miini, `?` tähistab suletud lahtrit ning numbrid `0` kuni `8` tähistavad avatud lahtrit vastavate ümbritsevate miinide arvuga.
+
+Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
 
     ```haskell
     initField :: Prot.GameConf -> Prot.InitialBoard -> Field
@@ -202,11 +216,9 @@ main = withSocketsDo $ do
 
 ## Lahendajate ideid
 
-Konkreetse lahendaja teostamine jääb Teie ülesandeks. Toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valik.
+Konkreetse lahendaja teostamine jääb Teie ülesandeks aga toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valik.
 
-Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme
-(99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui
-soovite saada maksimum punkte siis 20% ekspert taseme väljakutest on piisav.
+Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme (99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui soovite saada maksimum punkte siis 10% ekspert taseme väljakutest on piisav.
 
 ### Naiivne lahendaja
 
@@ -221,7 +233,7 @@ Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud 
 
 ### Tõenäosuslik lahendaja
 
-Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tulev ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks hinnata selle avamisel võitmise (kaotamise) tõenäosust.
+Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tuleb ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks hinnata selle avamisel võitmise (kaotamise) tõenäosust.
 
 Näiteks, kui väljakul esineb selline konfiguratsioon (kus F tähistab, et antud lahtri all on miin):
 
@@ -237,7 +249,7 @@ siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avami
 
 ### Lineaarvõrrandisüsteeme lahendav lahendaja
 
-Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks.  Iga k miiniga avatud lahtri:
+Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks. Iga k miiniga avatud lahtri:
 
 ```
 x1 x2 x3
@@ -279,7 +291,7 @@ x6 = 1 XOR x7 = 1 (sest x6 + x7 = 1)
 
 Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja avada võib lahtrid x1, x3, x4 ja x5.
 
-Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid ning seega on märksa nõrgemad kui peaksid. Selle probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja teostamine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
+Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid (võivad tagastada piiridest väljas olevaid tulemusi) ning seega on märksa nõrgemad kui peaksid. Mõnevõrra üldisema probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja teostamine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
 
 ### Alternatiivne lahendaja
 
@@ -293,13 +305,13 @@ Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi
 
 # Alternatiivülesanded
 
-Igat lisaülesannet saab lahendada ainult üks tudeng. Hinne kujuneb järgmiselt: vähemalt 10 punkti saab nõuetele vastava lahenduse eest ning ülejäänud punktid kujunevad lahenduse kvaliteedi ning koodi loetavuse pealt. Kuna alternatiivsed ülesanded on keerukamad kui põhiülesanne siis mängin piiratud koguses juhendaja rolli.
+Teil on võimalik ülaltood projekti asendada siin toodud alternatiivsete ülesannetega, Igat lisaülesannet saab lahendada ainult üks tudeng. Hinne kujuneb järgmiselt: vähemalt 10 punkti saab nõuetele vastava lahenduse eest ning ülejäänud punktid kujunevad lahenduse kvaliteedi (jõudlus, väljanägemine, töökindlus) ning koodi loetavuse pealt. Kuna alternatiivsed ülesanded on keerukamad kui põhiülesanne siis täidan piiratud koguses juhendaja rolli.
 
 ## Graafiline kasutajaliides
 
 Ülesandeks on teostada graafiline kasutajaliides miiniotsija mängule mis integreerub meie serveriga. See oleks väga kasulik testimiseks. Teostus peab kasutajaga interakteeruma analoogselt Windows keskkonna minesweeperiga: lahtreid peab saama avada vasaku hiireklõpsuga, ohtlikuks märkida parema hiireklõpsuga ning kesmine hiireklõps peab avama kõik ohtlikuks märgitud lahtrit ümbritsevad lahtrid.
 
-Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning kasutada võib mistahes linux keskkonda toetavat graafikateeki (vaata http://hackage.haskell.org/packages/#cat:Graphics ja http://hackage.haskell.org/packages/#cat:GUI).
+Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning kasutada võib mistahes linux keskkonda toetavat graafikateeki (vaata http://hackage.haskell.org/packages/#cat:Graphics ja http://hackage.haskell.org/packages/#cat:GUI). Soovitan peale vaadata graafikateegile [Gloss][8].
 
 ## Täieliku informatsiooniga miiniotsija
 
@@ -318,3 +330,4 @@ Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning 
 [5]: http://en.wikipedia.org/wiki/Integer_linear_programming
 [6]: http://en.wikipedia.org/wiki/Monte_carlo_method
 [7]: http://for.mat.bham.ac.uk/R.W.Kaye/minesw/minesw.pdf
+[8]: http://gloss.ouroborus.net/
