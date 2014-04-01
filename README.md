@@ -147,20 +147,20 @@ host = "127.0.0.1"
 ```
 Protokolli moodul `Prot` on imporditud `qualified` võtmesõnaga, et vältida nimekonflikte.
 
-Teie ülesandeks jääb teostada järgmine (teostused ei pea asuma `Client.hs` failis):
+Teie ülesandeks jääb teostada järgmine (ei pea asuma `Client.hs` failis):
 
 1. Väljaku initsialiseerimine algseisundiga. Andmetüüp `Prot.InitialBoard` on sünonüüm sõnede tüübile `String` ning selle formaat on järgmine:
 
-    * selle pikkuseks on väljaku lahtrite arv,
+    * sõne pikkuseks on väljaku lahtrite arv,
     * esimene märk vastab ülemisele vasakule lahtrile ning viimane alumisele paremale,
     * tähemärk `F` tähistab miini, `?` tähistab suletud lahtrit ning numbrid `0` kuni `8` tähistavad avatud lahtrit vastavate ümbritsevate miinide arvuga.
-
-    Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
 
     ```haskell
     initField :: Prot.GameConf -> Prot.InitialBoard -> Field
     initField = undefined
     ```
+
+    Selle funktsiooni teostamisel luua esmalt tühi väljak ning seejärel sättida lahtrid kasutades `setCells` funktsiooni.
 
 2. Mänguväljaku uuendamine serverilt tulnud infoga. Kindlasti kasutada eelmises osas defineeritud väljaku uuendamise funktsiooni.
 
@@ -169,7 +169,7 @@ Teie ülesandeks jääb teostada järgmine (teostused ei pea asuma `Client.hs` f
     updateField = undefined
     ```
 
-2. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta. Soovitan silumise eesmärgil mitte kasutada `IO` monaadi kuna ajutisi sõnumeid saab printida kasutades ka `Debug.Trace` moodulist asuvat `trace` funktsiooni.
+3. Väljaku lahendamine. Kui näiteks soovite lahendajas teha mittedeterministlikke otsuseid, logida või kanda lahendamisel kaasas mingit seisundit siis võite funktsiooni signatuuri ning järgnevat koodi vastavalt muuta. Soovitan silumise eesmärgil mitte kasutada `IO` monaadi kuna ajutisi sõnumeid saab printida kasutades ka `Debug.Trace` moodulist asuvat `trace` funktsiooni.
 
     ```haskell
     solveField :: Field -> [Prot.Coord]
