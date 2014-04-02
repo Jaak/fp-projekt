@@ -1,6 +1,10 @@
-# Sissejuhatus
 
-Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist.
+Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev automaatne miiniotsija lahendaja.
+
+* auto-gen TOC:
+{:toc}
+
+# Sissejuhatus
 
 Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja avama mõne suletud lahtri. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Mäng võidetakse kui kõik ohutud lahtrid on avatud.
 
@@ -28,7 +32,9 @@ avatakse automaatselt lisaks 8 lahtrit:
 ```
 Sellist lahtrite avamist jätkatakse rekursiivselt.
 
-On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev lahendaja.
+On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi.
+
+## Hinde kujunemine
 
 Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad järgmiselt:
 
