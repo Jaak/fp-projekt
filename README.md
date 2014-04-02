@@ -1,8 +1,27 @@
-
 Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev automaatne miiniotsija lahendaja.
 
-* auto-gen TOC:
-{:toc}
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Sissejuhatus](#sissejuhatus)
+	- [Hinde kujunemine](#hinde-kujunemine)
+- [Esimene ülesanne](#esimene-ülesanne)
+- [Teine ülesanne](#teine-ülesanne)
+	- [Serveriga suhtlus](#serveriga-suhtlus)
+	- [Lahendajate ideid](#lahendajate-ideid)
+		- [Naiivne lahendaja](#naiivne-lahendaja)
+		- [Lihtne lahendaja](#lihtne-lahendaja)
+		- [Tõenäosuslik lahendaja](#tõenäosuslik-lahendaja)
+		- [Lineaarvõrrandisüsteeme lahendav lahendaja](#lineaarvõrrandisüsteeme-lahendav-lahendaja)
+		- [Alternatiivne lahendaja](#alternatiivne-lahendaja)
+		- [Jõu meetodil lahendaja](#jõu-meetodil-lahendaja)
+- [Alternatiivülesanded](#alternatiivülesanded)
+	- [Graafiline kasutajaliides](#graafiline-kasutajaliides)
+	- [Täieliku informatsiooniga miiniotsija](#täieliku-informatsiooniga-miiniotsija)
+	- [Loogikavalemitest väljakute genereerija](#loogikavalemitest-väljakute-genereerija)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Sissejuhatus
 
