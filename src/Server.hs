@@ -142,7 +142,7 @@ main = withSocketsDo $ do
     Nothing -> do
       hPutStrLn stderr $ unlines
         [ "Invalid command line arguments. Options:"
-        , "   --random <num> <mines> <height> <width>"
+        , "   --random [number of games] [number of mines] [height] [width]"
         , "   --preset [FILE..]"]
 
 
