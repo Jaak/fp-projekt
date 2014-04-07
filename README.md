@@ -328,7 +328,7 @@ Teil on võimalik ülaltood projekti asendada siin toodud alternatiivsete ülesa
 
 ### Graafiline kasutajaliides
 
-Ülesandeks on teostada graafiline kasutajaliides miiniotsija mängule mis integreerub meie serveriga. See oleks väga kasulik testimiseks. Teostus peab kasutajaga interakteeruma analoogselt Windows keskkonna minesweeperiga: lahtreid peab saama avada vasaku hiireklõpsuga, ohtlikuks märkida parema hiireklõpsuga ning kesmine hiireklõps peab avama kõik ohtlikuks märgitud lahtrit ümbritsevad lahtrid.
+Ülesandeks on teostada graafiline kasutajaliides miiniotsija mängule mis integreerub meie serveriga. See oleks väga kasulik testimiseks. Teostus peab kasutajaga interakteeruma analoogselt Windows keskkonna minesweeperiga: lahtreid peab saama avada vasaku hiireklõpsuga, ohtlikuks märkida parema hiireklõpsuga ning kesmine hiireklõps peab avama kõik avatud lahtrit ümbritsevad suletud lahtrid kui selle ümbruses on ohtlikuks märgitud täpselt nii palju miine kui selle avatud lahtri ümbruses peaks olema.
 
 Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning kasutada võib mistahes linux keskkonda toetavat graafikateeki (vaata http://hackage.haskell.org/packages/#cat:Graphics ja http://hackage.haskell.org/packages/#cat:GUI). Soovitan peale vaadata graafikateegile [Gloss][8].
 
