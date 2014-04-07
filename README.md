@@ -1,8 +1,6 @@
-Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev automaatne miiniotsija lahendaja.
+# FPM projekt
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on avastada abstraktsel miiniväljal kõikide "miinide" asukohad ning selle käigus vältides nende lõhkamist. Projektis osalejate peamiseks ülesandeks on teostada võimalikult tugev automaatne miiniotsija lahendaja.
 
 - [Sissejuhatus](#sissejuhatus)
 	- [Hinde kujunemine](#hinde-kujunemine)
@@ -21,9 +19,7 @@ Miiniotsija ([minesweeper][3]) on ühe mängija arvutimäng, kus eesmärgiks on 
 	- [Täieliku informatsiooniga miiniotsija](#täieliku-informatsiooniga-miiniotsija)
 	- [Loogikavalemitest väljakute genereerija](#loogikavalemitest-väljakute-genereerija)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# Sissejuhatus
+## Sissejuhatus
 
 Mäng algab ettemääratud väljakul, mille kohta teab mängija selle mõõtmeid, sellel asuvate miinide arvu ning iga väljaku lahtri kohta kas see on avatud, suletud või kas selle lahtri all asub miin. Igal sammul peab väljaku lahendaja avama mõne suletud lahtri. Kui osutub, et lahtri all tõepoolest on miin, siis mängija kaotab. Kui tuleb välja, et seal miini ei ole, siis avatakse lahter ning mängijale antakse teada seda ümbritsevate miinide arv. Mäng võidetakse kui kõik ohutud lahtrid on avatud.
 
@@ -53,7 +49,7 @@ Sellist lahtrite avamist jätkatakse rekursiivselt.
 
 On teada, et miiniväljakute lahendamine on [NP-keeruline probleem][1]. Detailidesse laskumata tähendab see muuhulgas, et leidub lahenduvate väljakute klass, mille lahendamiseks ei ole teada polünomiaalse keerukusega algoritmi.
 
-## Hinde kujunemine
+### Hinde kujunemine
 
 Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad järgmiselt:
 
@@ -65,7 +61,7 @@ Projekti eest on võimalik kokku saada kuni 50 punkti ning punktid jaotuvad jär
 
 Ülesanne on jagatud kaheks alamosaks, et pakkuda natuke struktuuri ning ideid kuidas alustada. Seda struktuuri ei pea järgima ning Teie lahendaja võib välja näha hoopis teistsugune.
 
-# Esimene ülesanne
+## Esimene ülesanne
 
 Esimeseks ülesandeks on miiniväljaku esitamine ning selle sõneks teisendamine. Esimese osa raam asub failis `Field.hs`. Implementeerima peab järgmise mooduli:
 ```haskell
@@ -138,11 +134,11 @@ Edasi tuleb defineerida andmetüüp (või tüübisünonüüm) väljaku esitamise
 
     Antud funktsiooni teostamisel tulevad kasuks prelüüdi funktsioonid `unwords` ja `unlines`.
 
-# Teine ülesanne
+## Teine ülesanne
 
 Ülesandeks on teostada serveriga suhtlus ning väljakute lahendaja. Projekti teise osa raam asub failis `Client.hs`.
 
-## Serveriga suhtlus
+### Serveriga suhtlus
 
 Kõik serveriga suhtluse kasutatavad andmestruktuurid on defineeritud failis `Prot.hs`. Tuleb mainida, et server ei kontrolli väga usinalt kas klient järgib protokolli ning ei tegele ka vigadest taastumisega eriti hästi. Võib juhtuda, et serveri koodis on vigu ning kui arvate, et olete mõne leidnud, andke kindlasti teada.
 
@@ -237,24 +233,24 @@ main = withSocketsDo $ do
   game handle `finally` hClose handle
 ```
 
-## Lahendajate ideid
+### Lahendajate ideid
 
 Konkreetse lahendaja teostamine jääb Teie ülesandeks aga toon siin ära hulga ideid mida võib, ja oleks soovitatav, omavahel kombineerida. Näiteks käigu valimisel võite alustada lihtsa lahendajaga ning kui see ei anna tulemust siis proovida õnne keerukamaga ning kui ka see ei oska midagi ära teha siis tuleks teha juhuslik valik.
 
 Tõeliselt tugevad lahendajad suudavad keskmiselt lahendada 30% ekspert taseme (99 miini 16x30) ning 70% keskmise taseme (40 miini 16x16) väljakutest. Kui soovite saada maksimum punkte siis 10% ekspert taseme väljakutest on piisav.
 
-### Naiivne lahendaja
+#### Naiivne lahendaja
 
 Avab esimese ettejuhtuva (või juhuslikult valitud) suletud lahtri.
 
-### Lihtne lahendaja
+#### Lihtne lahendaja
 
 Kui leidub avatud lahter mille ümbruses on 'k' miini ning täpselt 'k' miini on juba ohtlikuks määratud siis võime avada kõik ümbritsevad kinnised lahtrid.
 
 Kui leidub avatud lahter märgendiga 'k', mille ümbruses on l (l <= k) suletud lahtrit ja k - l ohtliku lahtrit siis võime kõik suletud lahtrid ohtlikuks märkida.
 
 
-### Tõenäosuslik lahendaja
+#### Tõenäosuslik lahendaja
 
 Võite üritada hinnata tõenäosust, et mingi suletud lahter on ohtlik ning avada kõige ohutum lahter. Täpset tõenäosust saab näiteks hinnata kõikide võimalike kombinatsioonide läbi vaatamisega. Väga oluline on märkida, et miini esinemise tõenäosus on erinev tõenäosusest, et seda miini avades mäng kaotatakse kuna arvestada tuleb ka edasiste valikutega. Seega, ainult miini esinemise tõenäosust arvestav lahendaja ei ole kõige tugevam. Parimad lahendajad on need, mis suudavad iga lahtri jaoks hinnata selle avamisel võitmise (kaotamise) tõenäosust.
 
@@ -270,7 +266,7 @@ F F F
 
 siis iga suletud lahtri all on tõenäosusega 1/3 miin aga keskmise lahtri avamisel on tõenäosus kaotada 2/3 ning teisel kahel lahtril ainult 1/3.
 
-### Lineaarvõrrandisüsteeme lahendav lahendaja
+#### Lineaarvõrrandisüsteeme lahendav lahendaja
 
 Miiniväljakute lahendamise saab teisendada lineaarvõrrandisüsteemi lahendamiseks. Iga k miiniga avatud lahtri:
 
@@ -316,31 +312,31 @@ Nüüd saame serverile teada anda, et ohtlikuks tuleb määrata lahter x2 ja ava
 
 Pange tähele, et nii konstrueeritud lineaarvõrrandisüsteemide muutujad võtavad ainult väärtusi 0 ja 1. Seega klassikalised lineaarvõrrandisüsteemide lahendamise meetodid (näiteks [Gaussi meetod][4]) ei anna alati õigeid vastuseid (võivad tagastada piiridest väljas olevaid tulemusi) ning seega on märksa nõrgemad kui peaksid. Mõnevõrra üldisema probleemi nimi on [0-1 lineaarne programmeerimine][5] ning täpse lahendaja teostamine on suhteliselt keeruline ülesanne (teada on ainult halvimal juhul eksponentsiaalsed algoritmid).
 
-### Alternatiivne lahendaja
+#### Alternatiivne lahendaja
 
 Alati võib ise välja mõelda huvitavaid lahendamise algoritme.
 
 Näiteks. Loome mänguväljakust kaks koopiat. Ühes eeldame, et mingi positsioon on ohtlik ning teises, et see on ohutu.  Lahendame ja lihtsustame mõlemat väljakut lihtsa lahendajaga. Kui mõlemal väljakul jõuame mingi positsiooni kohta samale järeldusele siis see peab nii olema ka algsel väljakul.  Kui jõuame ühe väljakuga võimatu olukorrani siis peab teine kajastama tõde.  Võib tähele panna, et seda lahendajat saab rakendada ka rekursiivselt. Toodud idee on küll tunduvalt nõrgem korralikust lineaarvõrrandisüsteemile baseeruvast lahendajast aga suudab siiski teha päris häid valikuid ning seda on palju lihtsam teostada.
 
-### Jõu meetodil lahendaja
+#### Jõu meetodil lahendaja
 
 Kui suletud lahtreid on piisavalt vähe võib väljakut lahendada vaadates läbi kõik võimalikud kombinatsioonid.
 
-# Alternatiivülesanded
+## Alternatiivülesanded
 
 Teil on võimalik ülaltood projekti asendada siin toodud alternatiivsete ülesannetega, Igat lisaülesannet saab lahendada ainult üks tudeng. Hinne kujuneb järgmiselt: vähemalt 10 punkti saab nõuetele vastava lahenduse eest ning ülejäänud punktid kujunevad lahenduse kvaliteedi (jõudlus, väljanägemine, töökindlus) ning koodi loetavuse pealt. Kuna alternatiivsed ülesanded on keerukamad kui põhiülesanne siis täidan piiratud koguses juhendaja rolli.
 
-## Graafiline kasutajaliides
+### Graafiline kasutajaliides
 
 Ülesandeks on teostada graafiline kasutajaliides miiniotsija mängule mis integreerub meie serveriga. See oleks väga kasulik testimiseks. Teostus peab kasutajaga interakteeruma analoogselt Windows keskkonna minesweeperiga: lahtreid peab saama avada vasaku hiireklõpsuga, ohtlikuks märkida parema hiireklõpsuga ning kesmine hiireklõps peab avama kõik ohtlikuks märgitud lahtrit ümbritsevad lahtrid.
 
 Selle ülesande lahendamisel ei saa piirduda Haskell platform teegistikuga ning kasutada võib mistahes linux keskkonda toetavat graafikateeki (vaata http://hackage.haskell.org/packages/#cat:Graphics ja http://hackage.haskell.org/packages/#cat:GUI). Soovitan peale vaadata graafikateegile [Gloss][8].
 
-## Täieliku informatsiooniga miiniotsija
+### Täieliku informatsiooniga miiniotsija
 
 Ülesandeks on teostada käsureaprogramm mis saab sisendiks arvude tabeli ning alati annab väljundiks kas ühe miiniväljaku konfiguratsiooni (0-1 tabeli) mille iga lahtri naabrite arvud vastavad sisendtabelile või teatab, et vastavat väljakut ei leidu. Soovin algoritmi mis töötaks kiiresti ka suurte sisendite puhul.
 
-## Loogikavalemitest väljakute genereerija
+### Loogikavalemitest väljakute genereerija
 
 Ülesandeks on teostada käsureaprogramm mis saab sisendiks loogikavalemi (vabad muutujad, konjunktsioon, disjunktsioon ning eitus) ning väljundiks annab miiniväljaku konfiguratsiooni mis on lahenduv parajasti siis kui sisendvalem on kehtestatav. Eeskiri kuidas valemeid teisendada miiniväljakuteks on ette [määratud][7]. Peamine keerukus seisneb selles kuidas väikesed väljakutükid omavahel kombineerida.
 
