@@ -1,3 +1,4 @@
+import Common
 import Game
 import Prot
 
@@ -13,23 +14,6 @@ import Prelude hiding (ioError)
 import System.Environment (getArgs)
 import System.IO
 import System.Random
-
-{---------------------------------
- - Some rather generic functions -
- ---------------------------------}
-
-maybeRead :: Read a => String -> Maybe a
-maybeRead str = case reads str of
-  [(x, "")] -> Just x
-  _         -> Nothing
-
-raiseUserError :: MonadIO m => String -> m a
-raiseUserError = liftIO . ioError . userError
-
--- n-way split of StdDen
-splitStdGenN :: Int -> StdGen -> [StdGen]
-splitStdGenN k = take k . splits
-  where splits = uncurry (:) . second splits . split
 
 {---------
  - Types -

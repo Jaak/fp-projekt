@@ -1,6 +1,7 @@
 module Game (ClickResult(..), Game, clicks, showGame, readGame, randomGame, getGameConf)
   where
 
+import Common
 import Prot
 
 import Control.Monad (guard)
@@ -34,11 +35,11 @@ data Game = Game {
 
 getGameConf :: Game -> Prot.GameConf
 getGameConf game = Prot.GameConf {
-    _height = h,
-    _width = w,
+    _height = 1 + (y1 - y0),
+    _width  = 1 + (x1 - x0) ,
     _num_mines = _game_num_mines game
   }
-  where (_, C w h) = bounds (_game_cells game)
+  where (C x0 y0, C x1 y1) = bounds (_game_cells game)
 
 surrounding :: C -> [C]
 surrounding (C x y) = [C (x-1) (y-1), C (x-1) y, C (x-1) (y+1),
@@ -53,8 +54,8 @@ data ClickResult
 clicks :: [Coord] -> Game -> ClickResult
 clicks coords game
   | any isBadCell cs = GameFinished Loss
-  | numOpened == _game_closed_left game = GameFinished Win
-  | otherwise = GameContinue updateGame (zipWith mkOpen cs' newCells)
+  | _game_closed_left newGame == _game_num_mines newGame = GameFinished Win
+  | otherwise = GameContinue newGame (zipWith mkOpen cs' newCells)
   where
     arr = _game_cells game
     bnds = bounds arr
@@ -65,7 +66,7 @@ clicks coords game
     numOpened = length cs'
 
     newCells = [openCell (arr ! c) | c <- cs']
-    updateGame = game {
+    newGame = game {
       _game_closed_left = _game_closed_left game - numOpened,
       _game_cells = arr // zip cs' newCells
     }
@@ -86,9 +87,9 @@ clicks coords game
         seen' = S.insert i seen
 
 showGame :: Game -> String
-showGame game = [showCell x y | y <- [h - 1, h - 2 .. 0], x <- [0 .. w-1]]
+showGame game = [showCell x y | y <- [y1, y1 - 1 .. y0], x <- [x0 .. x1]]
   where
-    (_, C w h) = bounds (_game_cells game)
+    (C x0 y0, C x1 y1) = bounds (_game_cells game)
     showCell x y
       | not (_cell_is_open cell) = '?'
       | _cell_has_mine cell = 'F'
@@ -110,31 +111,33 @@ computeSurrCounts game = game { _game_cells = arr // update }
  -- where height and width are integers and mines and opens are sequences of 0s and 1s.
  --}
 readGame :: String -> Maybe Game
-readGame inp = case readsGame inp of
-  (x, _) :_ -> Just x
-  _         -> Nothing
+readGame inp = do
+    ns <- mapM maybeRead (words inp)
+    guard (verifyInput ns)
+    let ~(h : w : bs) = ns
+    let ~(ms, os) = splitAt (h*w) bs
+    return $ mkGame h w ms os
 
-readsGame :: ReadS Game
-readsGame s0 = do
-  (h, s1) <- reads s0
-  (w, s2) <- reads s1
-  (mines, s3) <- reads01s s2
-  (opens, s4) <- reads01s s3
-  return (mkGame h w mines opens, s4)
+verify01 :: Int -> Bool
+verify01 0 = True
+verify01 1 = True
+verify01 _ = False
 
-reads01s :: ReadS [Int]
-reads01s s0 = do
-  (n, s1) <- reads s0
-  guard (n == 0 || n == 1)
-  (ns, s2) <- reads01s s1
-  return (n : ns, s2)
+verifyInput :: [Int] -> Bool
+verifyInput (h : w : bs)
+    | h <= 0 || w <= 0 = False
+    | length bs /= 2*h*w = False
+    | any (not.verify01) bs = False
+    | otherwise = True
+verifyInput _ = False
 
 mkGame :: Int -> Int -> [Int] -> [Int] -> Game
 mkGame h w mines opens = computeSurrCounts game
   where
     n = sum mines
     cells = zipWith mkCell mines opens
-    arr = listArray (C 0 0, C (w - 1) (h - 1)) cells
+    coords = [C x y | y <- [h - 1, h - 2 .. 0], x <- [0 .. w - 1]]
+    arr = array (C 0 0, C (w - 1) (h - 1)) (zip coords cells)
     mkCell hasMine isOpen = Cell {
       _cell_surr = 0,
       _cell_has_mine = toEnum hasMine,
@@ -144,7 +147,7 @@ mkGame h w mines opens = computeSurrCounts game
     game = Game {
       _game_cells = arr,
       _game_num_mines = n,
-      _game_closed_left = h*w - length opens
+      _game_closed_left = h*w - sum opens
     }
 
 {-

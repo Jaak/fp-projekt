@@ -10,7 +10,7 @@ Executable Server
     main-is:            Server.hs
     ghc-options:        -Wall
     hs-source-dirs:     src
-    build-depends:      base, network, random, array, containers, mtl
+    build-depends:      base, network, random, array, containers, mtl, transformers
 
 Executable Client
     main-is:            Client.hs
